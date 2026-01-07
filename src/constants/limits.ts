@@ -1,0 +1,4 @@
+export const LIMITS = {
+  MAX_USERNAME_LENGTH: 30,
+  MIN_PASSWORD_LENGTH: 8,
+};
