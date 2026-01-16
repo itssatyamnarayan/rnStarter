@@ -7,4 +7,4 @@ export * from './colors/light';
 export * from './colors/dark';
 export * from './spacing';
 export * from './fonts';
-export * from './globalStyle';
+// export * from './globalStyle';

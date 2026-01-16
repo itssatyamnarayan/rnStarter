@@ -1,15 +1,18 @@
 import Haptics from '@mhpdev/react-native-haptics';
-import React, { useRef, useState, useMemo, memo } from 'react';
+import React, { memo, useRef, useCallback, ReactNode } from 'react';
 import {
   Pressable,
   Text,
   View,
   ActivityIndicator,
-  Animated,
   StyleSheet,
-  LayoutChangeEvent,
-  GestureResponderEvent,
+  Platform,
+  TextStyle,
+  ViewStyle,
+  StyleProp,
 } from 'react-native';
+
+/* ───────────────── Types ───────────────── */
 
 type Variant = 'primary' | 'outline' | 'danger' | 'ghost';
 type Size = 'small' | 'medium' | 'large';
@@ -27,31 +30,22 @@ interface AppButtonProps {
   disabled?: boolean;
   loading?: boolean;
 
-  fullWidth?: boolean;
   align?: Align;
+  fullWidth?: boolean;
 
-  leftIcon?: React.ReactNode;
-  rightIcon?: React.ReactNode;
+  leftIcon?: ReactNode;
+  rightIcon?: ReactNode;
 
   haptic?: HapticType;
-  rippleColor?: string;
 
-  containerStyle?: any;
-  textStyle?: any;
+  containerStyle?: StyleProp<ViewStyle>;
+  textStyle?: StyleProp<TextStyle>;
 
-  children?: React.ReactNode;
+  backgroundColor?: string;
+  borderRadius?: number;
+
+  children?: ReactNode;
 }
-
-const SIZE_MAP = {
-  small: { height: 36, padding: 12, font: 14 },
-  medium: { height: 48, padding: 16, font: 16 },
-  large: { height: 56, padding: 20, font: 18 },
-};
-
-const COLORS = {
-  primary: '#3478f6',
-  danger: '#dc3545',
-};
 
 const CustomButton = ({
   title,
@@ -64,174 +58,93 @@ const CustomButton = ({
   disabled = false,
   loading = false,
 
-  fullWidth = false,
   align = 'center',
+  fullWidth = false,
 
   leftIcon,
   rightIcon,
 
   haptic = 'light',
-  rippleColor = 'red',
+
+  backgroundColor,
+  borderRadius = 16,
 
   containerStyle,
   textStyle,
-
   children,
 }: AppButtonProps) => {
-  /* 🔒 PRESS LOCK */
   const pressLock = useRef(false);
 
-  /* 🌊 RIPPLE */
-  const rippleScale = useRef(new Animated.Value(0)).current;
-  const rippleOpacity = useRef(new Animated.Value(0)).current;
-  const rippleX = useRef(new Animated.Value(0)).current;
-  const rippleY = useRef(new Animated.Value(0)).current;
-
-  const [layout, setLayout] = useState({ width: 0, height: 0 });
-
-  const onLayout = (e: LayoutChangeEvent) => {
-    const { width, height } = e.nativeEvent.layout;
-    if (width !== layout.width || height !== layout.height) {
-      setLayout({ width, height });
-    }
-  };
-
-  const startRipple = (event: GestureResponderEvent) => {
-    const { locationX, locationY } = event.nativeEvent;
-
-    rippleX.setValue(locationX);
-    rippleY.setValue(locationY);
-
-    rippleScale.setValue(0);
-    rippleOpacity.setValue(0.3);
-
-    Animated.parallel([
-      Animated.timing(rippleScale, {
-        toValue: 1,
-        duration: 350,
-        useNativeDriver: true,
-      }),
-      Animated.timing(rippleOpacity, {
-        toValue: 0,
-        duration: 350,
-        useNativeDriver: true,
-      }),
-    ]).start();
-  };
-
-  const handlePress = async () => {
+  const handlePress = useCallback(async () => {
     if (pressLock.current || disabled || loading) return;
 
     pressLock.current = true;
+    Haptics.impact(haptic);
+
     try {
       await onPress?.();
     } finally {
       pressLock.current = false;
     }
-  };
+  }, [disabled, loading, onPress, haptic]);
 
-  const triggerHaptic = () => {
-    if (!haptic) return;
-    Haptics.impact(haptic);
-  };
-
-  /* 🎨 STYLES */
-  const sizeStyle = SIZE_MAP[size];
-
-  const backgroundColor = useMemo(() => {
-    if (variant === 'danger') return COLORS.danger;
-    if (variant === 'outline' || variant === 'ghost') return 'transparent';
-    return COLORS.primary;
-  }, [variant]);
-
-  const textColor =
-    variant === 'outline' || variant === 'ghost' ? COLORS.primary : '#fff';
-
-  const borderStyle =
-    variant === 'outline'
-      ? { borderWidth: 1, borderColor: COLORS.primary }
-      : undefined;
-
-  const alignSelf =
+  const alignSelf: ViewStyle['alignSelf'] =
     align === 'left' ? 'flex-start' : align === 'right' ? 'flex-end' : 'center';
-
-  const rippleSize = Math.max(layout.width, layout.height) * 2;
 
   return (
     <Pressable
-      onLayout={onLayout}
       onPress={handlePress}
       onLongPress={onLongPress}
-      onPressIn={e => {
-        if (!disabled && !loading) {
-          triggerHaptic();
-          startRipple(e);
-        }
-      }}
       disabled={disabled || loading}
       accessibilityRole="button"
-      accessibilityState={{ disabled: disabled || loading }}
+      accessibilityState={{ disabled: disabled || loading, busy: loading }}
       pointerEvents={pressLock.current ? 'none' : 'auto'}
-      style={[
-        styles.base,
-        {
-          height: sizeStyle.height,
-          paddingHorizontal: sizeStyle.padding,
-          borderRadius: sizeStyle.height / 2,
-          backgroundColor,
-          opacity: disabled ? 0.5 : 1,
-          alignSelf,
-          width: fullWidth ? '100%' : undefined,
-        },
-        borderStyle,
+      style={({ pressed }) => [
+        buttonStyles.base,
+        buttonStyles[size],
+        buttonStyles[variant],
+        fullWidth && buttonStyles.fullWidth,
+        disabled && buttonStyles.disabled,
+        pressed && Platform.OS === 'ios' && { opacity: 0.7 }, // ✅ FIXED
+        { alignSelf },
+        backgroundColor && { backgroundColor },
+        { borderRadius },
         containerStyle,
       ]}
+      android_ripple={{
+        color: 'rgba(62, 218, 143, 0.3)',
+        borderless: true,
+        foreground: true,
+      }}
     >
-      {/* 🌊 RIPPLE */}
-      <Animated.View
-        pointerEvents="none"
-        style={[
-          styles.ripple,
-          {
-            width: rippleSize,
-            height: rippleSize,
-            borderRadius: rippleSize / 2,
-            backgroundColor: rippleColor,
-            opacity: rippleOpacity,
-            transform: [
-              { translateX: Animated.subtract(rippleX, rippleSize / 2) },
-              { translateY: Animated.subtract(rippleY, rippleSize / 2) },
-              { scale: rippleScale },
-            ],
-          },
-        ]}
-      />
+      {/* Content */}
+      <View style={buttonStyles.content}>
+        {leftIcon && <View style={buttonStyles.iconLeft}>{leftIcon}</View>}
 
-      {loading ? (
-        <ActivityIndicator color={textColor} />
-      ) : (
-        <>
-          {leftIcon && <View style={styles.iconLeft}>{leftIcon}</View>}
+        {title && (
+          <Text
+            style={[
+              textStyles.base,
+              textStyles[size],
+              textStyles[variant],
+              loading && buttonStyles.hidden,
+              textStyle,
+            ]}
+          >
+            {title}
+          </Text>
+        )}
 
-          {title && (
-            <Text
-              style={[
-                {
-                  color: textColor,
-                  fontSize: sizeStyle.font,
-                  fontWeight: '600',
-                },
-                textStyle,
-              ]}
-            >
-              {title}
-            </Text>
-          )}
+        {rightIcon && <View style={buttonStyles.iconRight}>{rightIcon}</View>}
 
-          {rightIcon && <View style={styles.iconRight}>{rightIcon}</View>}
+        {children}
+      </View>
 
-          {children}
-        </>
+      {/* Loader */}
+      {loading && (
+        <View style={buttonStyles.loader}>
+          <ActivityIndicator color={textStyles[variant].color} />
+        </View>
       )}
     </Pressable>
   );
@@ -239,20 +152,101 @@ const CustomButton = ({
 
 export default memo(CustomButton);
 
-const styles = StyleSheet.create({
+const buttonStyles = StyleSheet.create({
+  /* Base */
   base: {
-    overflow: 'hidden',
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
+    overflow: 'hidden',
   },
-  ripple: {
-    position: 'absolute',
+
+  /* Sizes */
+  small: {
+    paddingVertical: 6,
+    paddingHorizontal: 12,
+    minHeight: 36,
+  },
+  medium: {
+    paddingVertical: 10,
+    paddingHorizontal: 16,
+    minHeight: 44,
+  },
+  large: {
+    paddingVertical: 14,
+    paddingHorizontal: 20,
+    minHeight: 52,
+  },
+
+  /* Variants */
+  primary: {
+    backgroundColor: '#3478f6',
+  },
+  danger: {
+    backgroundColor: '#dc3545',
+  },
+  outline: {
+    backgroundColor: 'transparent',
+    borderWidth: 1,
+    borderColor: '#3478f6',
+  },
+  ghost: {
+    backgroundColor: 'transparent',
+  },
+
+  /* States */
+  fullWidth: {
+    width: '100%',
+  },
+  disabled: {
+    opacity: 0.5,
+  },
+
+  /* Content */
+  content: {
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   iconLeft: {
     marginRight: 6,
   },
   iconRight: {
     marginLeft: 6,
+  },
+
+  /* Loader */
+  loader: {
+    ...StyleSheet.absoluteFill,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  hidden: {
+    opacity: 0,
+  },
+});
+
+const textStyles = StyleSheet.create({
+  base: {},
+  small: {
+    fontSize: 14,
+  },
+  medium: {
+    fontSize: 16,
+  },
+  large: {
+    fontSize: 18,
+  },
+
+  primary: {
+    color: '#fff',
+  },
+  danger: {
+    color: '#fff',
+  },
+  outline: {
+    color: '#3478f6',
+  },
+  ghost: {
+    color: '#3478f6',
   },
 });
