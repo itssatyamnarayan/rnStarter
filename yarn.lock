@@ -2126,6 +2126,25 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@react-native-community/datetimepicker@npm:^8.6.0":
+  version: 8.6.0
+  resolution: "@react-native-community/datetimepicker@npm:8.6.0"
+  dependencies:
+    invariant: "npm:^2.2.4"
+  peerDependencies:
+    expo: ">=52.0.0"
+    react: "*"
+    react-native: "*"
+    react-native-windows: "*"
+  peerDependenciesMeta:
+    expo:
+      optional: true
+    react-native-windows:
+      optional: true
+  checksum: 10c0/4f7e84480e3a324a1f4e235d13552468a758a0bf3d6de6a67ef39bfc56c18c41566c4411cc5fc075d000cc5f744a63ced77dd38c6bb13ae15cc980f9af891b56
+  languageName: node
+  linkType: hard
+
 "@react-native/assets-registry@npm:0.83.1":
   version: 0.83.1
   resolution: "@react-native/assets-registry@npm:0.83.1"
@@ -7894,7 +7913,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"prop-types@npm:^15.8.1":
+"prop-types@npm:^15.6.1, prop-types@npm:^15.8.1":
   version: 15.8.1
   resolution: "prop-types@npm:15.8.1"
   dependencies:
@@ -7985,12 +8004,28 @@ __metadata:
   languageName: node
   linkType: hard
 
+"react-fast-compare@npm:^2.0.4":
+  version: 2.0.4
+  resolution: "react-fast-compare@npm:2.0.4"
+  checksum: 10c0/f0300c677e95198b5f993cbb8a983dab09586157dc678f9e2b5b29ff941b6677a8776fbbdc425ce102fad86937e36bb45cfcfd797f006270b97ccf287ebfb885
+  languageName: node
+  linkType: hard
+
 "react-freeze@npm:^1.0.0":
   version: 1.0.4
   resolution: "react-freeze@npm:1.0.4"
   peerDependencies:
     react: ">=17.0.0"
   checksum: 10c0/8f51257c261bfefff86f618e958683536248f708019632d309ee5ebdd52f25d3c130660d06fb6f0f4fdef79f00f8ec7177233a872c2321f7d46b7e77ccc522a1
+  languageName: node
+  linkType: hard
+
+"react-hook-form@npm:^7.71.1":
+  version: 7.71.1
+  resolution: "react-hook-form@npm:7.71.1"
+  peerDependencies:
+    react: ^16.8.0 || ^17 || ^18 || ^19
+  checksum: 10c0/6c8fc0fa740d299481de3ed32bae98f7c6331240822c602363e5cd221746d875dc3c5e65d0039902b7f7a44dc9ac9a4932e00e9ad9af3051bed1987858ce78c7
   languageName: node
   linkType: hard
 
@@ -8012,6 +8047,17 @@ __metadata:
   version: 19.2.3
   resolution: "react-is@npm:19.2.3"
   checksum: 10c0/2b54c422c21b8dbd68a435a1cce21ecd5b6f06f48659531f7d53dd7368365da5a67e946f352fb2010d11ca40658aa67bec90995f0f1ec5556c0f71dbffe54994
+  languageName: node
+  linkType: hard
+
+"react-native-country-select@npm:^0.3.8":
+  version: 0.3.8
+  resolution: "react-native-country-select@npm:0.3.8"
+  peerDependencies:
+    react: "*"
+    react-native: "*"
+    react-native-safe-area-context: ">=4.0.0"
+  checksum: 10c0/6d57fc548f264db9a7f79548294840daa9596bc3c8de274a358ba2362323e66146c34272eb1df2e81593e7474766bfa58e947baf475c5c71f621bb4a813ea1f4
   languageName: node
   linkType: hard
 
@@ -8076,6 +8122,18 @@ __metadata:
     react: "*"
     react-native: "*"
   checksum: 10c0/9e047e8afdd5121296a3402c5c37363b9b37fbddc41f7b0b49b923ac4d2898954c8b57a6784a625321236987e494ee54f594e22f9de815f807e03a3433d7fefd
+  languageName: node
+  linkType: hard
+
+"react-native-walkthrough-tooltip@npm:^1.6.0":
+  version: 1.6.0
+  resolution: "react-native-walkthrough-tooltip@npm:1.6.0"
+  dependencies:
+    prop-types: "npm:^15.6.1"
+    react-fast-compare: "npm:^2.0.4"
+  peerDependencies:
+    "@types/react": ">=16.8.24"
+  checksum: 10c0/dc438c3869ca5960f747bcd13abc63841c7d80cc5659ca0b253e465f013848107a7a93c30d42f4ca8b371d8a35ebe51acbca892e7076282ab6f45ccbf6161c39
   languageName: node
   linkType: hard
 
@@ -8402,6 +8460,7 @@ __metadata:
     "@react-native-community/cli": "npm:20.0.0"
     "@react-native-community/cli-platform-android": "npm:20.0.0"
     "@react-native-community/cli-platform-ios": "npm:20.0.0"
+    "@react-native-community/datetimepicker": "npm:^8.6.0"
     "@react-native/babel-preset": "npm:0.83.1"
     "@react-native/eslint-config": "npm:0.83.1"
     "@react-native/metro-config": "npm:0.83.1"
@@ -8418,12 +8477,15 @@ __metadata:
     jest: "npm:^29.6.3"
     prettier: "npm:2.8.8"
     react: "npm:19.2.0"
+    react-hook-form: "npm:^7.71.1"
     react-native: "npm:0.83.1"
+    react-native-country-select: "npm:^0.3.8"
     react-native-element-dropdown: "npm:^2.12.4"
     react-native-safe-area-context: "npm:^5.6.2"
     react-native-screens: "npm:^4.19.0"
     react-native-svg: "npm:^15.15.1"
     react-native-svg-transformer: "npm:^1.5.2"
+    react-native-walkthrough-tooltip: "npm:^1.6.0"
     react-test-renderer: "npm:19.2.0"
     typescript: "npm:^5.8.3"
   languageName: unknown
