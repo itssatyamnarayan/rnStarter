@@ -1,3 +1,4 @@
+import { normalize } from '@/utils/normalize';
 import { FontFamily } from './fonts';
 
 export type FontWeight = '200' | '300' | '400' | '500' | '600' | '700' | '800';
@@ -12,11 +13,27 @@ export const FONT_MAP: Record<FontWeight, string> = {
   '800': FontFamily.InterTightExtraBold,
 };
 
-export type TextVariant = 'body' | 'caption' | 'title' | 'label';
+export type TextVariant = 'button' | 'label' | 'body' | 'title' | 'header';
 
 export const TYPOGRAPHY = {
-  body: { fontSize: 14, lineHeight: 20 },
-  caption: { fontSize: 12, lineHeight: 16 },
-  title: { fontSize: 20, lineHeight: 28 },
-  label: { fontSize: 16, lineHeight: 22 },
+  button: {
+    fontSize: normalize(16),
+    textAlign: 'center',
+  },
+  label: {
+    fontSize: normalize(14),
+    marginBottom: 8,
+  },
+  body: {
+    fontSize: normalize(16),
+    marginBottom: 8,
+  },
+  title: {
+    fontSize: normalize(20),
+    marginBottom: 8,
+  },
+  header: {
+    fontSize: normalize(24),
+    marginBottom: 24,
+  },
 } as const;

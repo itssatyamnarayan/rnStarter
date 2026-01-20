@@ -1,6 +1,7 @@
 import { StatusBar, useColorScheme } from 'react-native';
 import { AppProviders } from './providers';
 import { RootNavigator } from './navigation/root';
+import '@/i18n';
 
 function App() {
   const isDarkMode = useColorScheme() === 'dark';

@@ -1,72 +1,119 @@
 import CustomButton from '@/components/shared/CustomButton';
 import CustomText from '@/components/shared/CustomText';
 import FormInput from '@/components/shared/form-input/FormInput';
-import TextInputVariant from '@/components/shared/form-input/variants/TextInputVariant';
-import Icon from '@/components/shared/Icon';
+import { useAppTheme } from '@/context/ThemeContext';
 import { AuthStackScreenProps } from '@/types/navigation.types';
 import React from 'react';
 import { useForm } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { View } from 'react-native';
+import { layout } from '@/theme/layout';
 
-type props = AuthStackScreenProps<'Login'>;
+type Props = AuthStackScreenProps<'Login'>;
 
-const Login = ({}: props) => {
+interface LoginFormType {
+  email: string;
+  password: string;
+}
+
+const Login = ({ navigation }: Props) => {
   const {
     control,
     formState: { errors },
-  } = useForm<{
-    email: string;
-    password: string;
-  }>();
+  } = useForm<LoginFormType>();
+
+  const { color } = useAppTheme();
+  const { t } = useTranslation();
+
+  const onNavigateToSignup = () => {
+    navigation.navigate('Signup');
+  };
+  const onNavigateToForgotPassword = () => {
+    navigation.navigate('ForgotPassword');
+  };
 
   return (
-    <View style={{ flex: 1, padding: 16, gap: 16, backgroundColor: 'red' }}>
-      <CustomText weight="800">Login Screen</CustomText>
+    <SafeAreaView
+      style={[layout.flexContainer, { backgroundColor: color.background }]}
+    >
+      <CustomText
+        variant="header"
+        weight="600"
+        textColor={color.textPrimary}
+        textAlign="center"
+      >
+        {t('auth.welcome-back')}
+      </CustomText>
       <FormInput
         control={control}
         name="email"
         rules={{ required: true }}
-        label="Email"
+        label={t('auth.email')}
         inputProps={{
-          placeholder: 'Enter your email',
+          placeholder: t('auth.enterEmail'),
+          keyboardType: 'email-address',
         }}
         error={errors.email?.message}
         variant="text"
-        leftIcon={<Icon name="setting" size={20} color="white" />}
       />
+
       <FormInput
         control={control}
         name="password"
         rules={{ required: true }}
-        label="Password"
+        label={t('auth.password')}
         inputProps={{
-          placeholder: 'Enter your password',
+          placeholder: t('auth.enterPassword'),
         }}
         error={errors.password?.message}
+        isPassword
         variant="text"
       />
 
-      <TextInputVariant
-        // field={{
-        //   value: '',
-        //   onChange: () => {},
-        // }}
-        ref={null}
-        value={'fgfg'}
-        onChangeText={() => {}}
-        inputProps={{
-          placeholder: 'Custom Text Input Variant',
-        }}
-      />
       <CustomButton
-        title="Login"
+        title={t('auth.login')}
         onPress={() => {}}
         variant="primary"
-        // fullWidth
-        // loading
-        size="large"
+        fullWidth
       />
-    </View>
+
+      <View style={layout.rowGapCenter}>
+        <CustomText textColor={color.textSecondary}>
+          {t('auth.forgotPassword')}
+        </CustomText>
+        <CustomText
+          textColor={color.secondary}
+          onPress={onNavigateToForgotPassword}
+        >
+          {t('auth.reset')}
+        </CustomText>
+      </View>
+
+      <View style={layout.flexEnd}>
+        <View style={layout.rowGapCenter}>
+          <CustomText textColor={color.textSecondary}>
+            {t('auth.dont-have-an-account')}
+          </CustomText>
+          <CustomText textColor={color.secondary} onPress={onNavigateToSignup}>
+            {t('auth.create-account')}
+          </CustomText>
+        </View>
+
+        <View style={[layout.separator, { backgroundColor: color.border }]} />
+
+        <CustomText textColor={color.textSecondary} textAlign="center">
+          {t('auth.by-continuing-you-agree-to-our')}{' '}
+          <CustomText textColor={color.primary} onPress={() => {}}>
+            {t('auth.terms-of-service')}
+          </CustomText>{' '}
+          and{' '}
+          <CustomText textColor={color.primary} onPress={() => {}}>
+            {t('auth.privacy-policy')}
+          </CustomText>
+        </CustomText>
+      </View>
+    </SafeAreaView>
   );
 };
 

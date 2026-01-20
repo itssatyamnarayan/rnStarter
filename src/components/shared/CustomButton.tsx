@@ -1,8 +1,8 @@
+import { useAppTheme } from '@/context/ThemeContext';
 import Haptics from '@mhpdev/react-native-haptics';
-import React, { memo, useRef, useCallback, ReactNode } from 'react';
+import React, { memo, useRef, useCallback, ReactNode, useMemo } from 'react';
 import {
   Pressable,
-  Text,
   View,
   ActivityIndicator,
   StyleSheet,
@@ -11,11 +11,12 @@ import {
   ViewStyle,
   StyleProp,
 } from 'react-native';
+import CustomText from './CustomText';
+import { normalize } from '@/utils/normalize';
 
 /* ───────────────── Types ───────────────── */
 
 type Variant = 'primary' | 'outline' | 'danger' | 'ghost';
-type Size = 'small' | 'medium' | 'large';
 type Align = 'left' | 'center' | 'right';
 type HapticType = 'light' | 'medium' | 'heavy' | 'soft' | 'rigid';
 
@@ -25,7 +26,6 @@ interface AppButtonProps {
   onLongPress?: () => void;
 
   variant?: Variant;
-  size?: Size;
 
   disabled?: boolean;
   loading?: boolean;
@@ -53,7 +53,6 @@ const CustomButton = ({
   onLongPress,
 
   variant = 'primary',
-  size = 'medium',
 
   disabled = false,
   loading = false,
@@ -74,6 +73,7 @@ const CustomButton = ({
   children,
 }: AppButtonProps) => {
   const pressLock = useRef(false);
+  const { color } = useAppTheme();
 
   const handlePress = useCallback(async () => {
     if (pressLock.current || disabled || loading) return;
@@ -91,6 +91,32 @@ const CustomButton = ({
   const alignSelf: ViewStyle['alignSelf'] =
     align === 'left' ? 'flex-start' : align === 'right' ? 'flex-end' : 'center';
 
+  const variantButtonStyle = useMemo(
+    () => ({
+      primary: { backgroundColor: color.primary },
+      danger: { backgroundColor: color.danger },
+      outline: {
+        backgroundColor: 'transparent',
+        borderWidth: 1,
+        borderColor: color.primary,
+      },
+      ghost: {
+        backgroundColor: 'transparent',
+      },
+    }),
+    [color],
+  );
+
+  const variantTextStyle = useMemo(
+    () => ({
+      primary: { color: color.textDefault },
+      danger: { color: color.textDefault },
+      outline: { color: color.primary },
+      ghost: { color: color.primary },
+    }),
+    [color],
+  );
+
   return (
     <Pressable
       onPress={handlePress}
@@ -101,49 +127,50 @@ const CustomButton = ({
       pointerEvents={pressLock.current ? 'none' : 'auto'}
       style={({ pressed }) => [
         buttonStyles.base,
-        buttonStyles[size],
-        buttonStyles[variant],
+        variantButtonStyle[variant],
         fullWidth && buttonStyles.fullWidth,
         disabled && buttonStyles.disabled,
-        pressed && Platform.OS === 'ios' && { opacity: 0.7 }, // ✅ FIXED
+        pressed && Platform.OS === 'ios' && { opacity: 0.7 },
         { alignSelf },
         backgroundColor && { backgroundColor },
         { borderRadius },
         containerStyle,
       ]}
       android_ripple={{
-        color: 'rgba(62, 218, 143, 0.3)',
+        color: 'rgba(255,255,255,0.2)',
         borderless: true,
         foreground: true,
       }}
     >
+      {leftIcon && (
+        <View style={fullWidth && buttonStyles.leftIcon}>{leftIcon}</View>
+      )}
       {/* Content */}
       <View style={buttonStyles.content}>
-        {leftIcon && <View style={buttonStyles.iconLeft}>{leftIcon}</View>}
-
-        {title && (
-          <Text
+        {title ? (
+          <CustomText
             style={[
-              textStyles.base,
-              textStyles[size],
-              textStyles[variant],
               loading && buttonStyles.hidden,
+              variantTextStyle[variant],
               textStyle,
             ]}
+            variant="button"
+            weight="500"
           >
             {title}
-          </Text>
+          </CustomText>
+        ) : (
+          children
         )}
-
-        {rightIcon && <View style={buttonStyles.iconRight}>{rightIcon}</View>}
-
-        {children}
       </View>
+      {rightIcon && (
+        <View style={fullWidth && buttonStyles.rightIcon}>{rightIcon}</View>
+      )}
 
       {/* Loader */}
       {loading && (
         <View style={buttonStyles.loader}>
-          <ActivityIndicator color={textStyles[variant].color} />
+          <ActivityIndicator color={variantTextStyle[variant].color} />
         </View>
       )}
     </Pressable>
@@ -153,68 +180,25 @@ const CustomButton = ({
 export default memo(CustomButton);
 
 const buttonStyles = StyleSheet.create({
-  /* Base */
   base: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
     overflow: 'hidden',
+    padding: 12,
+    minHeight: normalize(46),
+    gap: 8,
   },
-
-  /* Sizes */
-  small: {
-    paddingVertical: 6,
-    paddingHorizontal: 12,
-    minHeight: 36,
-  },
-  medium: {
-    paddingVertical: 10,
-    paddingHorizontal: 16,
-    minHeight: 44,
-  },
-  large: {
-    paddingVertical: 14,
-    paddingHorizontal: 20,
-    minHeight: 52,
-  },
-
-  /* Variants */
-  primary: {
-    backgroundColor: '#3478f6',
-  },
-  danger: {
-    backgroundColor: '#dc3545',
-  },
-  outline: {
-    backgroundColor: 'transparent',
-    borderWidth: 1,
-    borderColor: '#3478f6',
-  },
-  ghost: {
-    backgroundColor: 'transparent',
-  },
-
-  /* States */
   fullWidth: {
     width: '100%',
   },
   disabled: {
-    opacity: 0.5,
+    opacity: 0.8,
   },
-
-  /* Content */
   content: {
     flexDirection: 'row',
     alignItems: 'center',
   },
-  iconLeft: {
-    marginRight: 6,
-  },
-  iconRight: {
-    marginLeft: 6,
-  },
-
-  /* Loader */
   loader: {
     ...StyleSheet.absoluteFill,
     justifyContent: 'center',
@@ -223,30 +207,6 @@ const buttonStyles = StyleSheet.create({
   hidden: {
     opacity: 0,
   },
-});
-
-const textStyles = StyleSheet.create({
-  base: {},
-  small: {
-    fontSize: 14,
-  },
-  medium: {
-    fontSize: 16,
-  },
-  large: {
-    fontSize: 18,
-  },
-
-  primary: {
-    color: '#fff',
-  },
-  danger: {
-    color: '#fff',
-  },
-  outline: {
-    color: '#3478f6',
-  },
-  ghost: {
-    color: '#3478f6',
-  },
+  leftIcon: { position: 'absolute', left: 14 },
+  rightIcon: { position: 'absolute', right: 14 },
 });

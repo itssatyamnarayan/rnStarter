@@ -2,10 +2,10 @@ import { useState } from 'react';
 import { FormInputProps } from './type';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import Tooltip from 'react-native-walkthrough-tooltip';
-// import FastImage from '@d11/react-native-fast-image';
 import { Controller, FieldValues } from 'react-hook-form';
 import { isIOS } from '@/constants/device';
 import { FormInputRenderer } from './FormInputRenderer';
+import CustomText from '../CustomText';
 
 const FormInput = <T extends FieldValues>({
   control,
@@ -27,7 +27,9 @@ const FormInput = <T extends FieldValues>({
       {/* Label + Tooltip */}
       {label && (
         <View style={styles.labelCont}>
-          <Text style={[styles.label, labelStyle]}>{label}</Text>
+          <CustomText style={labelStyle} variant="label" weight="400">
+            {label}
+          </CustomText>
 
           {isTooltip && (
             <Tooltip

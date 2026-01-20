@@ -60,7 +60,16 @@
     "completeProfile": "Complete your profile",
     "addPhoto": "Add Photo",
     "bio": "Bio",
-    "tellUsAboutYourself": "Tell us about yourself"
+    "tellUsAboutYourself": "Tell us about yourself",
+    "welcome-back": "Welcome Back 👋",
+    "reset": "Reset",
+    "dont-have-an-account": "Don’t have an account?",
+    "create-account": "Create Account",
+    "by-continuing-you-agree-to-our": "By continuing, you agree to our",
+    "terms-of-service": "Terms of Service",
+    "privacy-policy": "Privacy Policy",
+    "lets-get-started": "Let’s Get Started 🚀",
+    "send-now": "Send Now"
   },
   "navigation": {
     "home": "Home",

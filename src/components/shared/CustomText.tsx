@@ -1,34 +1,51 @@
-import { palette } from '@/theme';
+import { useAppTheme } from '@/context/ThemeContext';
 import {
   FONT_MAP,
   FontWeight,
   TextVariant,
   TYPOGRAPHY,
 } from '@/theme/typography';
-import React, { memo } from 'react';
+import React, { memo, useState } from 'react';
 import { Text, TextProps, StyleSheet } from 'react-native';
 
+type textAlign = 'auto' | 'left' | 'right' | 'center' | 'justify';
 interface CustomTextProps extends TextProps {
   weight?: FontWeight;
   variant?: TextVariant;
-  color?: string;
+  textColor?: string;
+  textAlign?: textAlign;
 }
 
 const CustomText = ({
   weight = '400',
   variant = 'body',
-  color = palette.black,
+  textColor,
   style,
+  textAlign,
   ...rest
 }: CustomTextProps) => {
+  const { color } = useAppTheme();
+  const [pressed, setPressed] = useState<boolean>(false);
+  const opacity = pressed ? 0.8 : 1;
+  const isPressable = typeof rest.onPress === 'function';
+
+  const handlePressIn = () => setPressed(true);
+  const handlePressOut = () => setPressed(false);
   return (
     <Text
       {...rest}
       allowFontScaling={false}
+      onPressIn={isPressable ? handlePressIn : undefined}
+      onPressOut={isPressable ? handlePressOut : undefined}
       style={[
         styles.base,
         TYPOGRAPHY[variant],
-        { fontFamily: FONT_MAP[weight], color },
+        {
+          fontFamily: FONT_MAP[weight],
+          opacity: opacity,
+          color: textColor || color.textPrimary,
+          textAlign: textAlign,
+        },
         style,
       ]}
     />

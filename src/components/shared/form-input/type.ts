@@ -32,6 +32,8 @@ export interface TextVariantProps {
   variant: 'text';
   inputProps?: TextInputProps;
   leftIcon?: ReactNode;
+  rightIcon?: ReactNode;
+  isPassword?: boolean;
 }
 
 export interface DropdownVariantProps {
