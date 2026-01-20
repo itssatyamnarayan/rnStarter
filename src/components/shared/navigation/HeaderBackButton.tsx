@@ -1,18 +1,38 @@
-import { Pressable } from 'react-native';
-import Icon from '../Icon';
+import { Pressable, StyleSheet } from 'react-native';
 import { memo } from 'react';
+import AppImage from '../AppImage';
+import { GlobalImage } from '@/assets/images';
+import { useAppTheme } from '@/context/ThemeContext';
 
 const HeaderBackButton = ({ onPress }: { onPress: () => void }) => {
+  const { color } = useAppTheme();
   return (
     <Pressable
       onPress={onPress}
       hitSlop={20}
       android_ripple={{ color: 'rgba(0,0,0,0.15)', borderless: true }}
-      style={({ pressed }) => ({ opacity: pressed ? 0.6 : 1 })}
+      style={({ pressed }) => [
+        {
+          opacity: pressed ? 0.6 : 1,
+        },
+        styles.iconCont,
+      ]}
     >
-      <Icon name="back" size={28} />
+      <AppImage
+        source={GlobalImage.back}
+        style={styles.backIcon}
+        tintColor={color.textPrimary}
+      />
     </Pressable>
   );
 };
 
 export default memo(HeaderBackButton);
+
+const styles = StyleSheet.create({
+  iconCont: {
+    width: 22,
+    height: 22,
+  },
+  backIcon: { width: '100%', height: '100%' },
+});

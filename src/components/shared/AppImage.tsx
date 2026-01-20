@@ -13,7 +13,7 @@ interface AppImageProps extends FastImageProps {
 
 const AppImage = memo(
   ({
-    resizeMode = FastImage.resizeMode.cover,
+    resizeMode = FastImage.resizeMode.contain,
     showLoader = false,
     placeholder = GlobalImage.profilePlaceholder,
     style,
