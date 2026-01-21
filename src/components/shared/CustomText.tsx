@@ -43,7 +43,7 @@ const CustomText = ({
         {
           fontFamily: FONT_MAP[weight],
           opacity: opacity,
-          color: textColor || color.textPrimary,
+          color: textColor || color.text_primary,
           textAlign: textAlign,
         },
         style,

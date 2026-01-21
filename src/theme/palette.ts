@@ -3,8 +3,12 @@ export const palette = {
     400: '#0597FF',
     500: '#082B60',
   },
-  white: '#FFFFFF',
+  white: {
+    200: '#FAFAFA',
+    900: '#FFFFFF',
+  },
   black: {
+    200: '#121212',
     500: '#2D2D2D',
     600: '#010407',
     900: '#000000',

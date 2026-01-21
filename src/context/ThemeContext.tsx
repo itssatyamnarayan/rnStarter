@@ -16,11 +16,13 @@ interface ThemeContextValue {
   mode: ThemeMode;
   setMode: (mode: ThemeMode) => void;
   color: AppTheme['color'];
+  icon: AppTheme['icon'];
 }
 
 const ThemeContext = createContext<ThemeContextValue>({
   theme: light,
   color: light.color,
+  icon: light.icon,
   mode: 'system',
   setMode: () => {},
 });
@@ -36,7 +38,13 @@ export const ThemeProvider = ({ children }: { children: ReactNode }) => {
   }, [mode, systemScheme]);
 
   const value = useMemo(
-    () => ({ theme: resolvedTheme, mode, setMode, color: resolvedTheme.color }),
+    () => ({
+      theme: resolvedTheme,
+      mode,
+      setMode,
+      color: resolvedTheme.color,
+      icon: resolvedTheme.icon,
+    }),
     [resolvedTheme, mode],
   );
 

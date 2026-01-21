@@ -24,14 +24,19 @@ const ForgotPassword = ({}: Props) => {
   const { t } = useTranslation();
 
   return (
-    <View style={[layout.flexContainer, { backgroundColor: color.background }]}>
+    <View
+      style={[
+        layout.flexContainer,
+        { backgroundColor: color.background_primary },
+      ]}
+    >
       <FormInput
         control={control}
         name="email"
         rules={{ required: true }}
         label={t('auth.email')}
-        inputProps={{
-          placeholder: t('auth.enterEmail'),
+        placeholder={t('auth.enterEmail')}
+        textInputProps={{
           keyboardType: 'email-address',
         }}
         error={errors.email?.message}

@@ -1,6 +1,6 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { AuthStackParamList } from '@/types/navigation.types';
-import { ForgotPassword, Login, Signup } from '@/screens/auth';
+import { ForgotPassword, Login, ProfileSetup, Signup } from '@/screens/auth';
 import HeaderBackButton from '@/components/shared/navigation/HeaderBackButton';
 import { FontFamily } from '@/theme';
 import { useAppTheme } from '@/context/ThemeContext';
@@ -14,27 +14,42 @@ export const AuthStack = () => {
       initialRouteName="Login"
       screenOptions={{
         headerShown: false,
-        headerStyle: { backgroundColor: color.background },
+        headerStyle: { backgroundColor: color.background_primary },
       }}
     >
       <Stack.Screen name="Login" component={Login} />
       <Stack.Screen name="Signup" component={Signup} />
-      <Stack.Screen
-        name="ForgotPassword"
-        component={ForgotPassword}
-        options={({ navigation }) => ({
+
+      <Stack.Group
+        screenOptions={({ navigation }) => ({
           headerShown: true,
-          title: 'Forgot Password?',
           headerTitleAlign: 'center',
           // eslint-disable-next-line react/no-unstable-nested-components
           headerLeft: () => <HeaderBackButton onPress={navigation.goBack} />,
           headerTitleStyle: {
             fontFamily: FontFamily.InterTightMedium,
-            color: color.textPrimary,
+            color: color.text_primary,
             fontSize: 20,
           },
         })}
-      />
+      >
+        <Stack.Screen
+          name="ForgotPassword"
+          component={ForgotPassword}
+          options={() => ({
+            headerShown: true,
+            title: 'Forgot Password?',
+          })}
+        />
+        <Stack.Screen
+          name="ProfileSetup"
+          component={ProfileSetup}
+          options={() => ({
+            title: 'Profile Setup',
+            headerLeft: () => null,
+          })}
+        />
+      </Stack.Group>
     </Stack.Navigator>
   );
 };

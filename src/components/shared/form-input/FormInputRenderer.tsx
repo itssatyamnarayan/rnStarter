@@ -1,10 +1,15 @@
 import React from 'react';
-import { FormInputProps } from './type';
+import {
+  DropdownVariantProps,
+  FormInputProps,
+  TextInputVariantProps,
+} from './type';
 import TextInputVariant from './variants/TextInputVariant';
 import { FieldValues } from 'react-hook-form';
+import DropdownVariant from './variants/DropdownVariant';
 
-type RendererProps = Omit<
-  FormInputProps<FieldValues>,
+type RendererProps<T extends FieldValues> = Omit<
+  FormInputProps<T>,
   'control' | 'name' | 'rules' | 'label' | 'error'
 > & {
   field: {
@@ -14,12 +19,17 @@ type RendererProps = Omit<
   };
 };
 
-export const FormInputRenderer = (props: RendererProps) => {
-  const { variant = 'text', field, ...rest } = props;
+export const FormInputRenderer = <T extends FieldValues>(
+  props: RendererProps<T>,
+) => {
+  const { variant, field, ...rest } = props;
 
   switch (variant) {
-    // case 'dropdown':
-    //   return <DropdownField field={field} {...rest} />;
+    case 'dropdown': {
+      const dropdownProps = rest as DropdownVariantProps;
+
+      return <DropdownVariant mode="form" field={field} {...dropdownProps} />;
+    }
 
     // case 'date':
     //   return <DateField mode="date" field={field} {...rest} />;
@@ -31,6 +41,7 @@ export const FormInputRenderer = (props: RendererProps) => {
     //   return <CountryPhoneField field={field} {...rest} />;
 
     default:
-      return <TextInputVariant field={field} {...rest} />;
+      const textInputProps = rest as TextInputVariantProps;
+      return <TextInputVariant field={field} mode="form" {...textInputProps} />;
   }
 };

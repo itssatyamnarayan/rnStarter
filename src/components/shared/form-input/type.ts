@@ -1,6 +1,7 @@
 import { ReactNode } from 'react';
 import { Control, FieldValues, Path } from 'react-hook-form';
 import { StyleProp, TextInputProps, TextStyle, ViewStyle } from 'react-native';
+import { DropdownProps } from 'react-native-element-dropdown/lib/typescript/components/Dropdown/model';
 
 export type FormInputVariant =
   | 'text'
@@ -9,18 +10,20 @@ export type FormInputVariant =
   | 'datetime'
   | 'country-phone';
 
+export type DropdownItem = {
+  label: string;
+  value: string;
+};
+
 export interface BaseFormInputProps<T extends FieldValues> {
   control: Control<T>;
   name: Path<T>;
   rules?: object;
   label?: string;
   error?: string;
-  disabled?: boolean;
 
   /** Styles */
   containerStyle?: StyleProp<ViewStyle>;
-  inputContainerStyle?: StyleProp<ViewStyle>;
-  inputStyle?: StyleProp<TextStyle>;
   labelStyle?: StyleProp<TextStyle>;
 
   /** Tooltip */
@@ -28,35 +31,47 @@ export interface BaseFormInputProps<T extends FieldValues> {
   tooltipMessage?: string;
 }
 
-export interface TextVariantProps {
-  variant: 'text';
-  inputProps?: TextInputProps;
+export interface TextInputVariantProps {
+  textInputProps?: TextInputProps;
   leftIcon?: ReactNode;
   rightIcon?: ReactNode;
   isPassword?: boolean;
+  inputContainerStyle?: StyleProp<ViewStyle>;
+  inputStyle?: StyleProp<TextStyle>;
+  disabled?: boolean;
+  placeholder?: string;
 }
 
 export interface DropdownVariantProps {
-  variant: 'dropdown';
-  dropdownData: { label: string; value: any }[];
+  dropdownData: DropdownItem[];
+  disabled?: boolean;
+  placeholder?: string;
+  isLoading?: boolean;
   onLoadMore?: () => void;
-  onDropdownSelect?: (item: any) => void;
+  onListFooterLoading?: () => React.ReactElement | null;
+  search?: boolean;
+  onSearchTextChange?: (text: string) => void;
+  onDropdownSelect?: (item: DropdownItem) => void;
+  dropdownContainerStyle?: StyleProp<ViewStyle>;
+  dropdownProps?: Partial<
+    Omit<
+      DropdownProps<any>,
+      'data' | 'value' | 'onChange' | 'labelField' | 'valueField'
+    >
+  >;
 }
 
 export interface DateVariantProps {
-  variant: 'date' | 'datetime';
   minimumDate?: Date;
   maximumDate?: Date;
 }
 
-export interface CountryPhoneVariantProps {
-  variant: 'country-phone';
-}
+export interface CountryPhoneVariantProps {}
 
 export type FormInputProps<T extends FieldValues> = BaseFormInputProps<T> &
   (
-    | TextVariantProps
-    | DropdownVariantProps
-    | DateVariantProps
-    | CountryPhoneVariantProps
+    | (TextInputVariantProps & { variant: 'text' })
+    | (DropdownVariantProps & { variant: 'dropdown' })
+    | (DateVariantProps & { variant: 'date' | 'datetime' })
+    | (CountryPhoneVariantProps & { variant: 'country-phone' })
   );

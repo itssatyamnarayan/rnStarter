@@ -1,13 +1,127 @@
+import CustomButton from '@/components/shared/CustomButton';
+import FormInput from '@/components/shared/form-input/FormInput';
+import { useAppTheme } from '@/context/ThemeContext';
 import { AuthStackScreenProps } from '@/types/navigation.types';
 import React from 'react';
-import { View, Text } from 'react-native';
+import { useForm } from 'react-hook-form';
+// import { useTranslation } from 'react-i18next';
+import { layout } from '@/theme/layout';
+import { View } from 'react-native';
 
-type props = AuthStackScreenProps<'ProfileSetup'>;
+type Props = AuthStackScreenProps<'ProfileSetup'>;
 
-const ProfileSetup = ({}: props) => {
+interface ProfileSetupFormType {
+  name: string;
+  phoneNumber: string;
+  gender: string;
+  address: string;
+  dob: string;
+  currentTime: string;
+  currentDate: string;
+  profilePicture: string;
+}
+
+const ProfileSetup = ({}: Props) => {
+  const {
+    control,
+    formState: { errors },
+    handleSubmit,
+  } = useForm<ProfileSetupFormType>();
+
+  const { color } = useAppTheme();
+  // const { t } = useTranslation();
+
   return (
-    <View>
-      <Text>ProfileSetup Screen</Text>
+    <View
+      style={[
+        layout.flexContainer,
+        { backgroundColor: color.background_primary },
+      ]}
+    >
+      <FormInput
+        control={control}
+        name="name"
+        rules={{ required: 'Name is required' }}
+        label="Name"
+        placeholder="Enter your name"
+        error={errors.name?.message}
+        variant="text"
+      />
+      <FormInput
+        control={control}
+        name="phoneNumber"
+        rules={{ required: true }}
+        label="Phone Number"
+        placeholder="Enter your phone number"
+        textInputProps={{
+          keyboardType: 'phone-pad',
+        }}
+        error={errors.phoneNumber?.message}
+        variant="text"
+      />
+      <FormInput
+        control={control}
+        name="gender"
+        rules={{ required: true }}
+        label="Gender"
+        error={errors.gender?.message}
+        variant="dropdown"
+        dropdownData={[
+          { label: 'Male', value: 'male' },
+          { label: 'Female', value: 'female' },
+          { label: 'Other', value: 'other' },
+        ]}
+        placeholder="Select your gender"
+      />
+
+      <FormInput
+        control={control}
+        name="dob"
+        rules={{ required: true }}
+        label="Date of Birth"
+        placeholder="Select your date of birth"
+        textInputProps={{
+          keyboardType: 'default',
+        }}
+        error={errors.dob?.message}
+        variant="text"
+      />
+      <FormInput
+        control={control}
+        name="address"
+        rules={{ required: true }}
+        label="Address"
+        placeholder="Enter your address"
+        error={errors.address?.message}
+        variant="text"
+      />
+      <FormInput
+        control={control}
+        name="currentTime"
+        rules={{ required: true }}
+        label="Current Time"
+        placeholder="Enter your current time"
+        error={errors.currentTime?.message}
+        variant="text"
+      />
+      <FormInput
+        control={control}
+        name="currentDate"
+        rules={{ required: true }}
+        label="Current Date"
+        placeholder="Enter your current date"
+        error={errors.currentDate?.message}
+        variant="text"
+      />
+
+      <CustomButton
+        title="Continue"
+        onPress={handleSubmit(data => {
+          console.log('Profile Data:', data);
+        })}
+        variant="primary"
+        fullWidth
+      />
     </View>
   );
 };

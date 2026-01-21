@@ -33,14 +33,24 @@ const Login = ({ navigation }: Props) => {
     navigation.navigate('ForgotPassword');
   };
 
+  const handleLogin = () => {
+    navigation.reset({
+      index: 0,
+      routes: [{ name: 'ProfileSetup' }],
+    });
+  };
+
   return (
     <SafeAreaView
-      style={[layout.flexContainer, { backgroundColor: color.background }]}
+      style={[
+        layout.flexContainer,
+        { backgroundColor: color.background_primary },
+      ]}
     >
       <CustomText
         variant="header"
         weight="600"
-        textColor={color.textPrimary}
+        textColor={color.text_primary}
         textAlign="center"
       >
         {t('auth.welcome-back')}
@@ -50,12 +60,13 @@ const Login = ({ navigation }: Props) => {
         name="email"
         rules={{ required: true }}
         label={t('auth.email')}
-        inputProps={{
-          placeholder: t('auth.enterEmail'),
+        placeholder={t('auth.enterEmail')}
+        textInputProps={{
           keyboardType: 'email-address',
         }}
         error={errors.email?.message}
         variant="text"
+        isTooltip
       />
 
       <FormInput
@@ -63,23 +74,22 @@ const Login = ({ navigation }: Props) => {
         name="password"
         rules={{ required: true }}
         label={t('auth.password')}
-        inputProps={{
-          placeholder: t('auth.enterPassword'),
-        }}
+        placeholder={t('auth.enterPassword')}
         error={errors.password?.message}
         isPassword
         variant="text"
+        isTooltip
       />
 
       <CustomButton
         title={t('auth.login')}
-        onPress={() => {}}
+        onPress={handleLogin}
         variant="primary"
         fullWidth
       />
 
       <View style={layout.rowGapCenter}>
-        <CustomText textColor={color.textSecondary}>
+        <CustomText textColor={color.text_secondary}>
           {t('auth.forgotPassword')}
         </CustomText>
         <CustomText
@@ -92,7 +102,7 @@ const Login = ({ navigation }: Props) => {
 
       <View style={layout.flexEnd}>
         <View style={layout.rowGapCenter}>
-          <CustomText textColor={color.textSecondary}>
+          <CustomText textColor={color.text_secondary}>
             {t('auth.dont-have-an-account')}
           </CustomText>
           <CustomText textColor={color.secondary} onPress={onNavigateToSignup}>
@@ -102,13 +112,13 @@ const Login = ({ navigation }: Props) => {
 
         <View style={[layout.separator, { backgroundColor: color.border }]} />
 
-        <CustomText textColor={color.textSecondary} textAlign="center">
+        <CustomText textColor={color.text_secondary} textAlign="center">
           {t('auth.by-continuing-you-agree-to-our')}{' '}
-          <CustomText textColor={color.primary} onPress={() => {}}>
+          <CustomText textColor={color.text_primary} onPress={() => {}}>
             {t('auth.terms-of-service')}
           </CustomText>{' '}
           and{' '}
-          <CustomText textColor={color.primary} onPress={() => {}}>
+          <CustomText textColor={color.text_primary} onPress={() => {}}>
             {t('auth.privacy-policy')}
           </CustomText>
         </CustomText>

@@ -109,8 +109,8 @@ const CustomButton = ({
 
   const variantTextStyle = useMemo(
     () => ({
-      primary: { color: color.textDefault },
-      danger: { color: color.textDefault },
+      primary: { color: color.text_default },
+      danger: { color: color.text_default },
       outline: { color: color.primary },
       ghost: { color: color.primary },
     }),

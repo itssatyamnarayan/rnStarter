@@ -32,12 +32,15 @@ const Signup = ({ navigation }: Props) => {
 
   return (
     <SafeAreaView
-      style={[layout.flexContainer, { backgroundColor: color.background }]}
+      style={[
+        layout.flexContainer,
+        { backgroundColor: color.background_primary },
+      ]}
     >
       <CustomText
         variant="header"
         weight="600"
-        textColor={color.textPrimary}
+        textColor={color.text_primary}
         textAlign="center"
       >
         {t('auth.lets-get-started')}
@@ -46,9 +49,9 @@ const Signup = ({ navigation }: Props) => {
         control={control}
         name="email"
         rules={{ required: true }}
+        placeholder={t('auth.enterEmail')}
         label={t('auth.email')}
-        inputProps={{
-          placeholder: t('auth.enterEmail'),
+        textInputProps={{
           keyboardType: 'email-address',
         }}
         error={errors.email?.message}
@@ -60,9 +63,7 @@ const Signup = ({ navigation }: Props) => {
         name="password"
         rules={{ required: true }}
         label={t('auth.password')}
-        inputProps={{
-          placeholder: t('auth.enterPassword'),
-        }}
+        placeholder={t('auth.enterPassword')}
         error={errors.password?.message}
         isPassword
         variant="text"
@@ -77,7 +78,7 @@ const Signup = ({ navigation }: Props) => {
 
       <View style={layout.flexEnd}>
         <View style={layout.rowGapCenter}>
-          <CustomText textColor={color.textSecondary}>
+          <CustomText textColor={color.text_secondary}>
             {t('auth.alreadyHaveAccount')}
           </CustomText>
           <CustomText textColor={color.secondary} onPress={onNavigateToLogin}>
@@ -87,13 +88,13 @@ const Signup = ({ navigation }: Props) => {
 
         <View style={[layout.separator, { backgroundColor: color.border }]} />
 
-        <CustomText textColor={color.textSecondary} textAlign="center">
+        <CustomText textColor={color.text_secondary} textAlign="center">
           {t('auth.by-continuing-you-agree-to-our')}{' '}
-          <CustomText textColor={color.primary} onPress={() => {}}>
+          <CustomText textColor={color.text_primary} onPress={() => {}}>
             {t('auth.terms-of-service')}
           </CustomText>{' '}
           and{' '}
-          <CustomText textColor={color.primary} onPress={() => {}}>
+          <CustomText textColor={color.text_primary} onPress={() => {}}>
             {t('auth.privacy-policy')}
           </CustomText>
         </CustomText>

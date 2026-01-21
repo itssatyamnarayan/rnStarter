@@ -1,17 +1,10 @@
 import { useAppTheme } from '@/context/ThemeContext';
 import { FontFamily } from '@/theme';
-import React, { forwardRef, memo, ReactNode, useState } from 'react';
-import {
-  View,
-  StyleSheet,
-  TextInput,
-  TextInputProps,
-  ViewStyle,
-  TextStyle,
-  StyleProp,
-} from 'react-native';
+import React, { forwardRef, memo, useState } from 'react';
+import { View, StyleSheet, TextInput } from 'react-native';
 import Icon from '../../Icon';
 import { normalize } from '@/utils/normalize';
+import { TextInputVariantProps } from '../type';
 
 type InputValue = string | number;
 
@@ -21,98 +14,88 @@ type RHFTextField<T = InputValue> = {
   onBlur?: () => void;
 };
 
-type FormModeProps<T = InputValue> = {
+type TextFormMode<T> = {
+  mode: 'form';
   field: RHFTextField<T>;
-  value?: never;
-  onChangeText?: never;
 };
 
-type IndependentModeProps<T = InputValue> = {
-  field?: never;
+type TextIndependentMode<T> = {
+  mode: 'standalone';
   value: T;
   onChangeText: (value: T) => void;
 };
+type TextInputVisualProps<T = InputValue> =
+  | (TextFormMode<T> & TextInputVariantProps)
+  | (TextIndependentMode<T> & TextInputVariantProps);
 
-interface CommonProps {
-  disabled?: boolean;
-  containerStyle?: StyleProp<ViewStyle>;
-  inputContainerStyle?: StyleProp<ViewStyle>;
-  inputStyle?: StyleProp<TextStyle>;
-
-  leftIcon?: ReactNode;
-  rightIcon?: ReactNode;
-  inputProps?: TextInputProps;
-  isPassword?: boolean;
-}
-
-export type TextInputVariantProps<T = InputValue> =
-  | (FormModeProps<T> & CommonProps)
-  | (IndependentModeProps<T> & CommonProps);
-
-const TextInputVariant = forwardRef<TextInput, TextInputVariantProps>(
-  (
-    {
-      field,
-      value,
-      onChangeText,
+const TextInputVariant = forwardRef<TextInput, TextInputVisualProps>(
+  (props, ref) => {
+    const {
+      mode,
       disabled,
-      containerStyle,
       inputContainerStyle,
       inputStyle,
       leftIcon,
-      inputProps,
+      textInputProps,
       rightIcon,
+      placeholder,
       isPassword = false,
-    },
-    ref,
-  ) => {
-    const resolvedValue = field ? field.value : value;
-    const handleChange = field ? field.onChange : onChangeText;
-    const handleBlur = field?.onBlur;
-    const { color } = useAppTheme();
-    const [isPasswordVisible, setIsPasswordVisible] = useState<boolean>(false);
+    } = props;
 
-    const handlePasswordVisible = () => {
+    const { color } = useAppTheme();
+    const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+
+    const togglePassword = () => {
       setIsPasswordVisible(prev => !prev);
     };
 
+    const resolvedValue = mode === 'form' ? props.field.value : props.value;
+
+    const handleChange =
+      mode === 'form' ? props.field.onChange : props.onChangeText;
+
+    const handleBlur = mode === 'form' ? props.field.onBlur : undefined;
+
     return (
-      <View style={containerStyle}>
-        <View
-          style={[
-            styles.wrapper,
-            { backgroundColor: color.background, borderColor: color.border },
-            inputContainerStyle,
-          ]}
-        >
-          {leftIcon && leftIcon}
+      <View
+        style={[
+          styles.wrapper,
+          {
+            backgroundColor: color.background_secondary,
+            borderColor: color.border,
+          },
+          inputContainerStyle,
+        ]}
+      >
+        {leftIcon}
 
-          <TextInput
-            ref={ref}
-            value={String(resolvedValue ?? '')}
-            onChangeText={text =>
-              handleChange?.(
-                typeof resolvedValue === 'number' ? Number(text) : text,
-              )
-            }
-            onBlur={handleBlur}
-            editable={!disabled}
-            style={[styles.input, { color: color.textPrimary }, inputStyle]}
-            returnKeyType="done"
-            placeholderTextColor={color.placeholder}
-            secureTextEntry={isPasswordVisible}
-            {...inputProps}
+        <TextInput
+          ref={ref}
+          value={String(resolvedValue ?? '')}
+          onChangeText={text =>
+            handleChange?.(
+              typeof resolvedValue === 'number' ? Number(text) : text,
+            )
+          }
+          onBlur={handleBlur}
+          editable={!disabled}
+          style={[styles.input, { color: color.text_primary }, inputStyle]}
+          returnKeyType="done"
+          placeholderTextColor={color.placeholder}
+          secureTextEntry={isPassword && !isPasswordVisible}
+          placeholder={placeholder}
+          {...textInputProps}
+        />
+
+        {isPassword && (
+          <Icon
+            name={isPasswordVisible ? 'eye' : 'eyeClose'}
+            size={22}
+            onPress={togglePassword}
           />
+        )}
 
-          {isPassword &&
-            (isPasswordVisible ? (
-              <Icon name="eye" size={24} onPress={handlePasswordVisible} />
-            ) : (
-              <Icon name="eyeOff" size={24} onPress={handlePasswordVisible} />
-            ))}
-
-          {rightIcon && rightIcon}
-        </View>
+        {rightIcon}
       </View>
     );
   },
