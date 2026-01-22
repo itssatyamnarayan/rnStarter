@@ -67,6 +67,7 @@ const Login = ({ navigation }: Props) => {
         error={errors.email?.message}
         variant="text"
         isTooltip
+        tooltipMessage='We"ll never share your email with anyone else.'
       />
 
       <FormInput
@@ -78,7 +79,8 @@ const Login = ({ navigation }: Props) => {
         error={errors.password?.message}
         isPassword
         variant="text"
-        isTooltip
+        // isTooltip
+        // tooltipMessage="Make sure your password is strong and secure."
       />
 
       <CustomButton

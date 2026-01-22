@@ -3,12 +3,12 @@ import { FormInputProps } from './type';
 import { StyleSheet, Text, View } from 'react-native';
 import Tooltip from 'react-native-walkthrough-tooltip';
 import { Controller, FieldValues } from 'react-hook-form';
-import { isIOS } from '@/constants/device';
 import { FormInputRenderer } from './FormInputRenderer';
 import CustomText from '../CustomText';
 import { useAppTheme } from '@/context/ThemeContext';
-import { FontFamily } from '@/theme';
+import { FontFamily, palette } from '@/theme';
 import Icon from '../Icon';
+import { normalize } from '@/utils/normalize';
 
 const FormInput = <T extends FieldValues>({
   control,
@@ -26,6 +26,10 @@ const FormInput = <T extends FieldValues>({
   const [showTooltip, setShowTooltip] = useState<boolean>(false);
   const { color, icon } = useAppTheme();
 
+  const handleTooltipPress = () => {
+    setShowTooltip(prev => !prev);
+  };
+
   return (
     <View style={[styles.container, containerStyle]}>
       {label && (
@@ -39,11 +43,24 @@ const FormInput = <T extends FieldValues>({
               isVisible={showTooltip}
               placement="bottom"
               tooltipStyle={styles.tooltip}
-              content={<Text>{tooltipMessage}</Text>}
+              content={
+                <CustomText style={[styles.tooltipText]}>
+                  {tooltipMessage}
+                </CustomText>
+              }
+              contentStyle={styles.tooltipContent}
               disableShadow
-              onClose={() => setShowTooltip(false)}
+              closeOnBackgroundInteraction
+              childContentSpacing={-50}
+              showChildInTooltip={false}
+              onClose={handleTooltipPress}
             >
-              <Icon name={icon.tooltip} size={15} style={styles.tooltipIcon} />
+              <Icon
+                name={icon.tooltip}
+                size={15}
+                style={styles.tooltipIcon}
+                onPress={handleTooltipPress}
+              />
             </Tooltip>
           )}
         </View>
@@ -75,7 +92,7 @@ const styles = StyleSheet.create({
   },
   errorText: {
     marginTop: 4,
-    fontSize: 12,
+    fontSize: normalize(12),
     marginLeft: 6,
     fontFamily: FontFamily.InterTightMedium,
   },
@@ -85,7 +102,17 @@ const styles = StyleSheet.create({
     gap: 8,
     alignItems: 'center',
   },
-  tooltipCont: { marginTop: isIOS ? 0 : -60 },
-  tooltip: {},
+  tooltip: {
+    backgroundColor: 'transparent',
+  },
+  tooltipContent: {
+    backgroundColor: palette.white[900],
+  },
   tooltipIcon: { marginBottom: 8 },
+  tooltipText: {
+    fontSize: normalize(14),
+    fontFamily: FontFamily.InterTightRegular,
+    textAlign: 'center',
+    color: palette.black[500],
+  },
 });

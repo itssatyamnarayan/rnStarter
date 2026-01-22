@@ -4,7 +4,6 @@ import { useAppTheme } from '@/context/ThemeContext';
 import { AuthStackScreenProps } from '@/types/navigation.types';
 import React from 'react';
 import { useForm } from 'react-hook-form';
-// import { useTranslation } from 'react-i18next';
 import { layout } from '@/theme/layout';
 import { View } from 'react-native';
 
@@ -29,8 +28,6 @@ const ProfileSetup = ({}: Props) => {
   } = useForm<ProfileSetupFormType>();
 
   const { color } = useAppTheme();
-  // const { t } = useTranslation();
-
   return (
     <View
       style={[
@@ -47,17 +44,15 @@ const ProfileSetup = ({}: Props) => {
         error={errors.name?.message}
         variant="text"
       />
+
       <FormInput
         control={control}
         name="phoneNumber"
         rules={{ required: true }}
         label="Phone Number"
         placeholder="Enter your phone number"
-        textInputProps={{
-          keyboardType: 'phone-pad',
-        }}
         error={errors.phoneNumber?.message}
-        variant="text"
+        variant="country-phone"
       />
       <FormInput
         control={control}
@@ -73,7 +68,6 @@ const ProfileSetup = ({}: Props) => {
         ]}
         placeholder="Select your gender"
       />
-
       <FormInput
         control={control}
         name="dob"
@@ -113,7 +107,6 @@ const ProfileSetup = ({}: Props) => {
         error={errors.currentDate?.message}
         variant="text"
       />
-
       <CustomButton
         title="Continue"
         onPress={handleSubmit(data => {

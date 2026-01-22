@@ -1,7 +1,12 @@
-import { ReactNode } from 'react';
+import { ReactNode, Ref } from 'react';
 import { Control, FieldValues, Path } from 'react-hook-form';
 import { StyleProp, TextInputProps, TextStyle, ViewStyle } from 'react-native';
+import { ICountryCca2 } from 'react-native-country-select';
 import { DropdownProps } from 'react-native-element-dropdown/lib/typescript/components/Dropdown/model';
+import {
+  IPhoneInputRef,
+  PhoneInputProps,
+} from 'react-native-international-phone-number';
 
 export type FormInputVariant =
   | 'text'
@@ -66,7 +71,20 @@ export interface DateVariantProps {
   maximumDate?: Date;
 }
 
-export interface CountryPhoneVariantProps {}
+export interface CountryPhoneVariantProps {
+  showFlag?: boolean;
+  defaultCountry?: ICountryCca2;
+  disabled?: boolean;
+  ref?: Ref<IPhoneInputRef>;
+  containerStyle?: StyleProp<ViewStyle>;
+  placeholder?: string;
+  phoneInputProps?: Partial<
+    Omit<
+      PhoneInputProps,
+      'defaultValue' | 'onChangeText' | 'defaultCountry' | 'ref'
+    >
+  >;
+}
 
 export type FormInputProps<T extends FieldValues> = BaseFormInputProps<T> &
   (

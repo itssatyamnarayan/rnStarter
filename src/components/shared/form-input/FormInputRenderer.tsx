@@ -1,5 +1,6 @@
 import React from 'react';
 import {
+  CountryPhoneVariantProps,
   DropdownVariantProps,
   FormInputProps,
   TextInputVariantProps,
@@ -7,6 +8,7 @@ import {
 import TextInputVariant from './variants/TextInputVariant';
 import { FieldValues } from 'react-hook-form';
 import DropdownVariant from './variants/DropdownVariant';
+import CountryPhoneVariant from './variants/CountryPhoneVariant';
 
 type RendererProps<T extends FieldValues> = Omit<
   FormInputProps<T>,
@@ -29,6 +31,16 @@ export const FormInputRenderer = <T extends FieldValues>(
       const dropdownProps = rest as DropdownVariantProps;
 
       return <DropdownVariant mode="form" field={field} {...dropdownProps} />;
+    }
+
+    case 'country-phone': {
+      return (
+        <CountryPhoneVariant
+          mode="form"
+          field={field}
+          {...(rest as CountryPhoneVariantProps)}
+        />
+      );
     }
 
     // case 'date':

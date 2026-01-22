@@ -84,6 +84,8 @@ const TextInputVariant = forwardRef<TextInput, TextInputVisualProps>(
           placeholderTextColor={color.placeholder}
           secureTextEntry={isPassword && !isPasswordVisible}
           placeholder={placeholder}
+          cursorColor={color.text_primary}
+          allowFontScaling={false}
           {...textInputProps}
         />
 
