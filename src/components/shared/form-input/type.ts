@@ -1,12 +1,9 @@
-import { ReactNode, Ref } from 'react';
+import { ReactNode } from 'react';
 import { Control, FieldValues, Path } from 'react-hook-form';
 import { StyleProp, TextInputProps, TextStyle, ViewStyle } from 'react-native';
-import { ICountryCca2 } from 'react-native-country-select';
+import { ICountry, ICountryCca2 } from 'react-native-country-select';
 import { DropdownProps } from 'react-native-element-dropdown/lib/typescript/components/Dropdown/model';
-import {
-  IPhoneInputRef,
-  PhoneInputProps,
-} from 'react-native-international-phone-number';
+import { PhoneInputProps } from 'react-native-international-phone-number';
 
 export type FormInputVariant =
   | 'text'
@@ -37,7 +34,6 @@ export interface BaseFormInputProps<T extends FieldValues> {
 }
 
 export interface TextInputVariantProps {
-  textInputProps?: TextInputProps;
   leftIcon?: ReactNode;
   rightIcon?: ReactNode;
   isPassword?: boolean;
@@ -45,6 +41,9 @@ export interface TextInputVariantProps {
   inputStyle?: StyleProp<TextStyle>;
   disabled?: boolean;
   placeholder?: string;
+  textInputProps?: Partial<
+    Omit<TextInputProps, 'onChangeText' | 'value' | 'placeholder' | 'editable'>
+  >;
 }
 
 export interface DropdownVariantProps {
@@ -61,7 +60,13 @@ export interface DropdownVariantProps {
   dropdownProps?: Partial<
     Omit<
       DropdownProps<any>,
-      'data' | 'value' | 'onChange' | 'labelField' | 'valueField'
+      | 'data'
+      | 'value'
+      | 'onChange'
+      | 'labelField'
+      | 'valueField'
+      | 'placeholder'
+      | 'disable'
     >
   >;
 }
@@ -75,13 +80,18 @@ export interface CountryPhoneVariantProps {
   showFlag?: boolean;
   defaultCountry?: ICountryCca2;
   disabled?: boolean;
-  ref?: Ref<IPhoneInputRef>;
-  containerStyle?: StyleProp<ViewStyle>;
+  countryContainerStyle?: StyleProp<ViewStyle>;
   placeholder?: string;
+  onChangeSelectedCountry?: (country: ICountry) => void;
   phoneInputProps?: Partial<
     Omit<
       PhoneInputProps,
-      'defaultValue' | 'onChangeText' | 'defaultCountry' | 'ref'
+      | 'defaultValue'
+      | 'onChangeText'
+      | 'defaultCountry'
+      | 'onChangeSelectedCountry'
+      | 'placeholder'
+      | 'disabled'
     >
   >;
 }

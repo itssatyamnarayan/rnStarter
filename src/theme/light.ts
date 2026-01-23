@@ -13,6 +13,7 @@ export const light = {
     placeholder: palette.gray[400],
     text_default: palette.white[900],
     danger: palette.red[500],
+    disabled: palette.white[100],
   },
   icon: {
     tooltip: 'tooltip_light' as IconName,

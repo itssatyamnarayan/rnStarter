@@ -1,7 +1,7 @@
 import { useAppTheme } from '@/context/ThemeContext';
 import { FontFamily } from '@/theme';
 import React, { forwardRef, memo, useState } from 'react';
-import { View, StyleSheet, TextInput } from 'react-native';
+import { View, StyleSheet, TextInput, Pressable } from 'react-native';
 import Icon from '../../Icon';
 import { normalize } from '@/utils/normalize';
 import { TextInputVariantProps } from '../type';
@@ -38,7 +38,7 @@ const TextInputVariant = forwardRef<TextInput, TextInputVisualProps>(
       leftIcon,
       textInputProps,
       rightIcon,
-      placeholder,
+      placeholder = 'Enter text',
       isPassword = false,
     } = props;
 
@@ -61,13 +61,19 @@ const TextInputVariant = forwardRef<TextInput, TextInputVisualProps>(
         style={[
           styles.wrapper,
           {
-            backgroundColor: color.background_secondary,
+            backgroundColor: disabled
+              ? color.disabled
+              : color.background_secondary,
             borderColor: color.border,
           },
           inputContainerStyle,
         ]}
       >
-        {leftIcon}
+        {leftIcon && (
+          <Pressable style={styles.leftIcon} disabled={disabled} hitSlop={20}>
+            {leftIcon}
+          </Pressable>
+        )}
 
         <TextInput
           ref={ref}
@@ -90,14 +96,21 @@ const TextInputVariant = forwardRef<TextInput, TextInputVisualProps>(
         />
 
         {isPassword && (
-          <Icon
-            name={isPasswordVisible ? 'eye' : 'eyeClose'}
-            size={22}
+          <Pressable
             onPress={togglePassword}
-          />
+            style={styles.rightIcon}
+            disabled={disabled}
+            hitSlop={20}
+          >
+            <Icon name={isPasswordVisible ? 'eye' : 'eyeClose'} size={22} />
+          </Pressable>
         )}
 
-        {rightIcon}
+        {rightIcon && (
+          <Pressable style={styles.rightIcon} disabled={disabled} hitSlop={20}>
+            {rightIcon}
+          </Pressable>
+        )}
       </View>
     );
   },
@@ -111,22 +124,19 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderWidth: 1,
     borderRadius: 12,
-    paddingHorizontal: 12,
-    minHeight: normalize(48),
+    overflow: 'hidden',
   },
   input: {
     flex: 1,
     fontSize: normalize(16),
     fontFamily: FontFamily.InterTightRegular,
+    minHeight: normalize(48),
+    paddingHorizontal: 12,
   },
   leftIcon: {
-    width: 20,
-    height: 20,
-    marginRight: 8,
+    marginLeft: 12,
   },
   rightIcon: {
-    width: 20,
-    height: 20,
-    marginLeft: 8,
+    marginRight: 12,
   },
 });

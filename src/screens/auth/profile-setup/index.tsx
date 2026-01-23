@@ -43,6 +43,9 @@ const ProfileSetup = ({}: Props) => {
         placeholder="Enter your name"
         error={errors.name?.message}
         variant="text"
+        // leftIcon={<Icon name="downArrow" size={20} />}
+        // rightIcon={<Icon name="downArrow" size={20} />}
+        // isPassword
       />
 
       <FormInput
@@ -53,7 +56,9 @@ const ProfileSetup = ({}: Props) => {
         placeholder="Enter your phone number"
         error={errors.phoneNumber?.message}
         variant="country-phone"
+        // showFlag={false}
       />
+
       <FormInput
         control={control}
         name="gender"

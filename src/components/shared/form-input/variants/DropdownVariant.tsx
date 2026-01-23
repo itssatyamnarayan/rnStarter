@@ -1,6 +1,6 @@
 import { useAppTheme } from '@/context/ThemeContext';
 import { DropdownVariantProps } from '../type';
-import { ActivityIndicator, StyleSheet, View } from 'react-native';
+import { ActivityIndicator, StyleSheet } from 'react-native';
 import { Dropdown } from 'react-native-element-dropdown';
 import Icon from '../../Icon';
 import { normalize } from '@/utils/normalize';
@@ -49,69 +49,66 @@ const DropdownVariant = (props: DropdownVisualProps) => {
   const handleChange = mode === 'form' ? props.field.onChange : props.onChange;
 
   return (
-    <View style={dropdownContainerStyle}>
-      <Dropdown
-        {...dropdownProps}
-        data={dropdownData}
-        labelField="label"
-        valueField="value"
-        value={resolvedValue}
-        disable={disabled}
-        placeholder={placeholder}
-        style={[
-          styles.dropdown,
-          {
-            borderColor: color.border,
-            backgroundColor: color.background_secondary,
-          },
-        ]}
-        containerStyle={[
-          styles.dropdownContainer,
-          {
-            borderColor: color.border,
-            backgroundColor: color.background_primary,
-          },
-        ]}
-        placeholderStyle={[
-          styles.placeholderStyle,
-          { color: color.text_secondary },
-        ]}
-        selectedTextStyle={[
-          styles.selectedTextStyle,
-          { color: color.text_primary },
-        ]}
-        itemTextStyle={[styles.dropdownText, { color: color.text_primary }]}
-        activeColor={color.primary}
-        renderRightIcon={() =>
-          isLoading ? (
-            <ActivityIndicator size="small" color={color.primary} />
-          ) : (
-            <Icon
-              name="downArrow"
-              size={18}
-              color={color.background_secondary}
-            />
-          )
-        }
-        onChange={item => {
-          handleChange(item.value);
-          onDropdownSelect?.(item);
-        }}
-        flatListProps={{
-          onEndReachedThreshold: 0.05,
-          onEndReached: onLoadMore,
-          ListFooterComponent: onListFooterLoading,
-        }}
-        search={search}
-        searchPlaceholder="Search..."
-        onChangeText={onSearchTextChange}
-        inputSearchStyle={{
-          color: color.text_primary,
-          borderRadius: normalize(12),
+    <Dropdown
+      {...dropdownProps}
+      data={dropdownData}
+      labelField="label"
+      valueField="value"
+      value={resolvedValue}
+      disable={disabled}
+      placeholder={placeholder}
+      style={[
+        styles.dropdown,
+        {
           borderColor: color.border,
-        }}
-      />
-    </View>
+          backgroundColor: disabled
+            ? color.disabled
+            : color.background_secondary,
+        },
+        dropdownContainerStyle,
+      ]}
+      containerStyle={[
+        styles.dropdownContainer,
+        {
+          borderColor: color.border,
+          backgroundColor: color.background_primary,
+        },
+      ]}
+      placeholderStyle={[
+        styles.placeholderStyle,
+        { color: color.text_secondary },
+      ]}
+      selectedTextStyle={[
+        styles.selectedTextStyle,
+        { color: color.text_primary },
+      ]}
+      itemTextStyle={[styles.dropdownText, { color: color.text_primary }]}
+      activeColor={color.primary}
+      renderRightIcon={() =>
+        isLoading ? (
+          <ActivityIndicator size="small" color={color.primary} />
+        ) : (
+          <Icon name="downArrow" size={18} color={color.background_secondary} />
+        )
+      }
+      onChange={item => {
+        handleChange(item.value);
+        onDropdownSelect?.(item);
+      }}
+      flatListProps={{
+        onEndReachedThreshold: 0.05,
+        onEndReached: onLoadMore,
+        ListFooterComponent: onListFooterLoading,
+      }}
+      search={search}
+      searchPlaceholder="Search..."
+      onChangeText={onSearchTextChange}
+      inputSearchStyle={{
+        color: color.text_primary,
+        borderRadius: normalize(12),
+        borderColor: color.border,
+      }}
+    />
   );
 };
 

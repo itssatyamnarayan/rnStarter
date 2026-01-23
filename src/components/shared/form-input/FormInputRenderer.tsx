@@ -6,7 +6,7 @@ import {
   TextInputVariantProps,
 } from './type';
 import TextInputVariant from './variants/TextInputVariant';
-import { FieldValues } from 'react-hook-form';
+import { ControllerRenderProps, FieldValues } from 'react-hook-form';
 import DropdownVariant from './variants/DropdownVariant';
 import CountryPhoneVariant from './variants/CountryPhoneVariant';
 
@@ -14,11 +14,7 @@ type RendererProps<T extends FieldValues> = Omit<
   FormInputProps<T>,
   'control' | 'name' | 'rules' | 'label' | 'error'
 > & {
-  field: {
-    value: any;
-    onChange: (value: any) => void;
-    onBlur?: () => void;
-  };
+  field: ControllerRenderProps<T>;
 };
 
 export const FormInputRenderer = <T extends FieldValues>(
@@ -36,6 +32,7 @@ export const FormInputRenderer = <T extends FieldValues>(
     case 'country-phone': {
       return (
         <CountryPhoneVariant
+          ref={field.ref}
           mode="form"
           field={field}
           {...(rest as CountryPhoneVariantProps)}
@@ -54,6 +51,13 @@ export const FormInputRenderer = <T extends FieldValues>(
 
     default:
       const textInputProps = rest as TextInputVariantProps;
-      return <TextInputVariant field={field} mode="form" {...textInputProps} />;
+      return (
+        <TextInputVariant
+          field={field}
+          ref={field.ref}
+          mode="form"
+          {...textInputProps}
+        />
+      );
   }
 };

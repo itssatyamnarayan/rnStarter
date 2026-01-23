@@ -14,6 +14,7 @@ export const dark = {
     placeholder: palette.gray[400],
     text_default: palette.white[900],
     danger: palette.red[500],
+    disabled: palette.gray[300],
   },
   icon: {
     tooltip: 'tooltip_dark',
