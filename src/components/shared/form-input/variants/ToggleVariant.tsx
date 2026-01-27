@@ -7,7 +7,6 @@ import {
   Pressable,
   StyleSheet,
   ViewStyle,
-  TextStyle,
   FlexAlignType,
 } from 'react-native';
 import Animated, {
@@ -15,34 +14,27 @@ import Animated, {
   useAnimatedStyle,
   withTiming,
 } from 'react-native-reanimated';
+import { ToggleVariantProps } from '../type';
 
-type ToggleSize = 'sm' | 'md';
-
-type ToggleStyles = {
-  wrapper?: ViewStyle;
-  track?: ViewStyle;
-  thumb?: ViewStyle;
-  label?: TextStyle;
-};
-
-type ToggleProps = {
+type RHFToggleField = {
   value: boolean;
   onChange: (value: boolean) => void;
-
-  disabled?: boolean;
-  size?: ToggleSize;
-
-  showLabel?: boolean;
-  onLabel?: string;
-  offLabel?: string;
-
-  activeColor?: string;
-  inactiveColor?: string;
-  thumbColor?: string;
-
-  styles?: ToggleStyles;
-  alignItems?: FlexAlignType;
 };
+type ToggleFormMode = {
+  mode: 'form';
+  field: RHFToggleField;
+};
+
+type ToggleStandaloneMode = {
+  mode: 'standalone';
+  value: boolean;
+  onChange: (value: boolean) => void;
+  alignToggle?: FlexAlignType;
+};
+
+export type ToggleVisualProps =
+  | (ToggleFormMode & ToggleVariantProps)
+  | (ToggleStandaloneMode & ToggleVariantProps);
 
 const SIZE_MAP = {
   sm: {
@@ -61,26 +53,29 @@ const SIZE_MAP = {
   },
 } as const;
 
-const Toggle = ({
-  value,
-  onChange,
-  disabled = false,
-  size = 'md',
+const Toggle = (props: ToggleVisualProps) => {
+  const {
+    disabled = false,
+    size = 'md',
 
-  showLabel = true,
-  onLabel = 'ON',
-  offLabel = 'OFF',
+    showLabel = true,
+    onLabel = 'ON',
+    offLabel = 'OFF',
 
-  activeColor,
-  inactiveColor,
-  thumbColor,
-  alignItems = 'flex-end',
+    activeColor,
+    inactiveColor,
+    thumbColor,
+    styles: styleOverrides,
+    mode,
+  } = props;
 
-  styles: styleOverrides,
-}: ToggleProps) => {
   const { width, height, thumb, padding, labelSize } = SIZE_MAP[size];
   const { color } = useAppTheme();
-  const labelJustify = value ? 'flex-start' : 'flex-end';
+  const resolvedValue = mode === 'form' ? props.field.value : props.value;
+  const handleChange = mode === 'form' ? props.field.onChange : props.onChange;
+  const labelJustify = resolvedValue ? 'flex-start' : 'flex-end';
+  const alignToggleEnd: FlexAlignType =
+    mode === 'standalone' && props.alignToggle ? props.alignToggle : 'flex-end';
   const thumbCont = {
     width: thumb,
     height: thumb,
@@ -89,30 +84,39 @@ const Toggle = ({
     right: size === 'sm' ? 28 : 30,
   };
   const pressableOpacity = disabled ? 0.6 : 1.0;
-  activeColor = activeColor || color.primary;
-  inactiveColor = inactiveColor || color.placeholder;
+  const activeClr = activeColor || color.primary;
+  const inactiveClr = inactiveColor || color.placeholder;
+  const formWrapper: ViewStyle =
+    mode === 'form'
+      ? { position: 'absolute', right: 0 }
+      : { position: 'relative' };
 
   const travelDistance = width - thumb - padding * 2;
 
-  const translateX = useSharedValue(value ? travelDistance : 0);
+  const translateX = useSharedValue(resolvedValue ? travelDistance : 0);
 
   useEffect(() => {
-    translateX.value = withTiming(value ? travelDistance : 0, {
+    translateX.value = withTiming(resolvedValue ? travelDistance : 0, {
       duration: 180,
     });
-  }, [value, travelDistance, translateX]);
+  }, [resolvedValue, travelDistance, translateX]);
 
   const thumbStyle = useAnimatedStyle(() => ({
     transform: [{ translateX: translateX.value }],
   }));
 
+  const handlePress = () => {
+    handleChange?.(!resolvedValue);
+  };
+
   return (
     <Pressable
-      onPress={() => onChange(!value)}
+      onPress={handlePress}
       accessibilityRole="switch"
-      accessibilityState={{ checked: value, disabled }}
+      accessibilityState={{ checked: resolvedValue, disabled }}
       style={[
-        { opacity: pressableOpacity, alignItems },
+        { opacity: pressableOpacity, alignItems: alignToggleEnd },
+        formWrapper,
         styleOverrides?.wrapper,
       ]}
       disabled={disabled}
@@ -126,7 +130,7 @@ const Toggle = ({
             height,
             borderRadius: height / 2,
             padding,
-            backgroundColor: value ? activeColor : inactiveColor,
+            backgroundColor: resolvedValue ? activeClr : inactiveClr,
           },
           styleOverrides?.track,
         ]}
@@ -152,7 +156,7 @@ const Toggle = ({
                 styleOverrides?.label,
               ]}
             >
-              {value ? onLabel : offLabel}
+              {resolvedValue ? onLabel : offLabel}
             </Text>
           </View>
         )}

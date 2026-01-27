@@ -83,7 +83,7 @@ const DropdownVariant = (props: DropdownVisualProps) => {
         { color: color.text_primary },
       ]}
       itemTextStyle={[styles.dropdownText, { color: color.text_primary }]}
-      activeColor={color.primary}
+      activeColor={color.border}
       renderRightIcon={() =>
         isLoading ? (
           <ActivityIndicator size="small" color={color.primary} />

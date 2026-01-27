@@ -14,9 +14,8 @@ interface ProfileSetupFormType {
   phoneNumber: string;
   gender: string;
   address: string;
-  dob: string;
-  currentTime: string;
-  currentDate: string;
+  dob: Date;
+  currentTime: Date;
   profilePicture: string;
 }
 
@@ -25,9 +24,22 @@ const ProfileSetup = ({}: Props) => {
     control,
     formState: { errors },
     handleSubmit,
-  } = useForm<ProfileSetupFormType>();
+  } = useForm<ProfileSetupFormType>({
+    defaultValues: {
+      dob: undefined,
+      currentTime: undefined,
+    },
+  });
 
   const { color } = useAppTheme();
+
+  const handleContinue = (data: ProfileSetupFormType) => {
+    console.log('Profile Data:', {
+      ...data,
+      dob: data.dob.toISOString(),
+      currentTime: data.currentTime.toISOString(),
+    });
+  };
   return (
     <View
       style={[
@@ -79,11 +91,21 @@ const ProfileSetup = ({}: Props) => {
         rules={{ required: true }}
         label="Date of Birth"
         placeholder="Select your date of birth"
-        textInputProps={{
-          keyboardType: 'default',
-        }}
         error={errors.dob?.message}
-        variant="text"
+        variant="date"
+        maximumDate={new Date()}
+        // disabled
+      />
+
+      <FormInput
+        control={control}
+        name="currentTime"
+        rules={{ required: true }}
+        label="Current Time"
+        placeholder="Enter your current time"
+        error={errors.currentTime?.message}
+        variant="time"
+        iconName="clock"
       />
       <FormInput
         control={control}
@@ -94,29 +116,10 @@ const ProfileSetup = ({}: Props) => {
         error={errors.address?.message}
         variant="text"
       />
-      <FormInput
-        control={control}
-        name="currentTime"
-        rules={{ required: true }}
-        label="Current Time"
-        placeholder="Enter your current time"
-        error={errors.currentTime?.message}
-        variant="text"
-      />
-      <FormInput
-        control={control}
-        name="currentDate"
-        rules={{ required: true }}
-        label="Current Date"
-        placeholder="Enter your current date"
-        error={errors.currentDate?.message}
-        variant="text"
-      />
+
       <CustomButton
         title="Continue"
-        onPress={handleSubmit(data => {
-          console.log('Profile Data:', data);
-        })}
+        onPress={handleSubmit(handleContinue)}
         variant="primary"
         fullWidth
       />

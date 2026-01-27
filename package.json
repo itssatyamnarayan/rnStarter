@@ -19,6 +19,7 @@
     "@react-navigation/native": "^7.1.26",
     "@react-navigation/native-stack": "^7.9.0",
     "i18next": "^25.7.4",
+    "moment": "^2.30.1",
     "react": "19.2.0",
     "react-hook-form": "^7.71.1",
     "react-i18next": "^16.5.3",

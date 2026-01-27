@@ -9,6 +9,7 @@ import { useAppTheme } from '@/context/ThemeContext';
 import { FontFamily, palette } from '@/theme';
 import Icon from '../Icon';
 import { normalize } from '@/utils/normalize';
+import { isIOS } from '@/constants/device';
 
 const FormInput = <T extends FieldValues>({
   control,
@@ -51,7 +52,7 @@ const FormInput = <T extends FieldValues>({
               contentStyle={styles.tooltipContent}
               disableShadow
               closeOnBackgroundInteraction
-              childContentSpacing={-50}
+              childContentSpacing={isIOS ? 0 : -50}
               showChildInTooltip={false}
               onClose={handleTooltipPress}
             >

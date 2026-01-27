@@ -1,6 +1,5 @@
 import React from 'react';
 import {
-  CountryPhoneVariantProps,
   DropdownVariantProps,
   FormInputProps,
   TextInputVariantProps,
@@ -9,6 +8,8 @@ import TextInputVariant from './variants/TextInputVariant';
 import { ControllerRenderProps, FieldValues } from 'react-hook-form';
 import DropdownVariant from './variants/DropdownVariant';
 import CountryPhoneVariant from './variants/CountryPhoneVariant';
+import ToggleVariant from './variants/ToggleVariant';
+import DateTimeVariant from './variants/DateTimeVariant';
 
 type RendererProps<T extends FieldValues> = Omit<
   FormInputProps<T>,
@@ -35,19 +36,37 @@ export const FormInputRenderer = <T extends FieldValues>(
           ref={field.ref}
           mode="form"
           field={field}
-          {...(rest as CountryPhoneVariantProps)}
+          {...rest}
         />
       );
     }
 
-    // case 'date':
-    //   return <DateField mode="date" field={field} {...rest} />;
+    case 'toggle': {
+      return <ToggleVariant mode="form" field={field} {...rest} />;
+    }
+
+    case 'date':
+      return (
+        <DateTimeVariant
+          mode="form"
+          field={field}
+          dateTimeMode="date"
+          {...rest}
+        />
+      );
+
+    case 'time':
+      return (
+        <DateTimeVariant
+          mode="form"
+          field={field}
+          dateTimeMode="time"
+          {...rest}
+        />
+      );
 
     // case 'datetime':
     //   return <DateField mode="datetime" field={field} {...rest} />;
-
-    // case 'country-phone':
-    //   return <CountryPhoneField field={field} {...rest} />;
 
     default:
       const textInputProps = rest as TextInputVariantProps;

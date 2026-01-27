@@ -1,4 +1,6 @@
 import Back from './back.svg';
+import Calendar from './calendar.svg';
+import Clock from './clock.svg';
 import DownArrow from './downArrow.svg';
 import Eye from './eye.svg';
 import EyeClose from './eyeClose.svg';
@@ -9,6 +11,8 @@ import Tooltip_light from './tooltip_light.svg';
 
 export const Icons = {
   back: Back,
+  calendar: Calendar,
+  clock: Clock,
   downArrow: DownArrow,
   eye: Eye,
   eyeClose: EyeClose,

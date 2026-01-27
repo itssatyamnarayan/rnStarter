@@ -9,7 +9,6 @@ import { useTranslation } from 'react-i18next';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { View } from 'react-native';
 import { layout } from '@/theme/layout';
-import ToggleVariant from '@/components/shared/form-input/variants/ToggleVariant';
 
 type Props = AuthStackScreenProps<'Login'>;
 
@@ -41,8 +40,6 @@ const Login = ({ navigation }: Props) => {
     });
   };
 
-  const [isEnabled, setIsEnabled] = React.useState(false);
-
   return (
     <SafeAreaView
       style={[
@@ -71,14 +68,6 @@ const Login = ({ navigation }: Props) => {
         variant="text"
         isTooltip
         tooltipMessage='We"ll never share your email with anyone else.'
-      />
-
-      <ToggleVariant
-        value={isEnabled}
-        onChange={value => setIsEnabled(value)}
-        // disabled
-        size="sm"
-        // showLabel={false}
       />
 
       <FormInput

@@ -25,12 +25,12 @@
 		C6FE1899C9A34BBE9BBDA084 /* InterTight-Black.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 5BB6EF6225314DB992544B9F /* InterTight-Black.ttf */; };
 		C766681BB81941F1A275E4D8 /* InterTight-ExtraLight.ttf in Resources */ = {isa = PBXBuildFile; fileRef = ACCC5719DD37479B98B01055 /* InterTight-ExtraLight.ttf */; };
 		D2E291424E044FE993A37A35 /* InterTight-Italic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 0B3EBC8AEB2C4A0B80D616EE /* InterTight-Italic.ttf */; };
+		D6CD3FAA543B449783AB1BDE /* TwemojiMozilla.woff2 in Resources */ = {isa = PBXBuildFile; fileRef = F27714F76A634F398F60A3B8 /* TwemojiMozilla.woff2 */; };
 		D977F77B4DCA456BB095AE29 /* InterTight-SemiBoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 570AEA58090E4D428DD11274 /* InterTight-SemiBoldItalic.ttf */; };
 		E4A1A4AAE2714212916003DF /* InterTight-ThinItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 29D0ABC243D34FE4B3161D0F /* InterTight-ThinItalic.ttf */; };
 		EDE64618EA0049CAA73C33CC /* InterTight-Thin.ttf in Resources */ = {isa = PBXBuildFile; fileRef = FF42AFAE24CE41539923C622 /* InterTight-Thin.ttf */; };
 		F487E4A9F5F74A48ACBFB8AB /* InterTight-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4987E32BE3044B9E912ABC2E /* InterTight-Regular.ttf */; };
 		FA65EC7F97ED4367BAB15E41 /* InterTight-ExtraBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 9745DBCD80444C28B6AB2CA4 /* InterTight-ExtraBold.ttf */; };
-		D6CD3FAA543B449783AB1BDE /* TwemojiMozilla.woff2 in Resources */ = {isa = PBXBuildFile; fileRef = F27714F76A634F398F60A3B8 /* TwemojiMozilla.woff2 */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -61,8 +61,8 @@
 		985A99601E9B4C46ADD11032 /* InterTight-Medium.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "InterTight-Medium.ttf"; path = "../src/assets/fonts/InterTight-Medium.ttf"; sourceTree = "<group>"; };
 		ACCC5719DD37479B98B01055 /* InterTight-ExtraLight.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "InterTight-ExtraLight.ttf"; path = "../src/assets/fonts/InterTight-ExtraLight.ttf"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
+		F27714F76A634F398F60A3B8 /* TwemojiMozilla.woff2 */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = TwemojiMozilla.woff2; path = "../node_modules/react-native-country-select/lib/assets/fonts/TwemojiMozilla.woff2"; sourceTree = "<group>"; };
 		FF42AFAE24CE41539923C622 /* InterTight-Thin.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = undefined; includeInIndex = 0; lastKnownFileType = unknown; name = "InterTight-Thin.ttf"; path = "../src/assets/fonts/InterTight-Thin.ttf"; sourceTree = "<group>"; };
-		F27714F76A634F398F60A3B8 /* TwemojiMozilla.woff2 */ = {isa = PBXFileReference; name = "TwemojiMozilla.woff2"; path = "../node_modules/react-native-country-select/lib/assets/fonts/TwemojiMozilla.woff2"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
