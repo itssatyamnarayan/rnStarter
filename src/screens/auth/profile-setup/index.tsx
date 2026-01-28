@@ -6,6 +6,9 @@ import React from 'react';
 import { useForm } from 'react-hook-form';
 import { layout } from '@/theme/layout';
 import { View } from 'react-native';
+import { useAppDispatch } from '@/hooks/useAppDispatch';
+import { loginAction } from '@/redux/slice/auth.slice';
+import { persistor } from '@/store';
 
 type Props = AuthStackScreenProps<'ProfileSetup'>;
 
@@ -30,15 +33,18 @@ const ProfileSetup = ({}: Props) => {
       currentTime: undefined,
     },
   });
+  const dispatch = useAppDispatch();
 
   const { color } = useAppTheme();
 
-  const handleContinue = (data: ProfileSetupFormType) => {
+  const handleContinue = async (data: ProfileSetupFormType) => {
     console.log('Profile Data:', {
       ...data,
       dob: data.dob.toISOString(),
       currentTime: data.currentTime.toISOString(),
     });
+    dispatch(loginAction());
+    await persistor.purge();
   };
   return (
     <View

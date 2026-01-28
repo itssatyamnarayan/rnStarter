@@ -3,7 +3,7 @@ import { AppProviders } from './providers';
 import { RootNavigator } from './navigation/root';
 import '@/i18n';
 
-function App() {
+const App = () => {
   const isDarkMode = useColorScheme() === 'dark';
 
   return (
@@ -12,6 +12,6 @@ function App() {
       <RootNavigator />
     </AppProviders>
   );
-}
+};
 
 export default App;

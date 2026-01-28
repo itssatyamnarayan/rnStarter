@@ -63,7 +63,7 @@ const DateTimeVariant = (props: DateTimeVisualProps) => {
     event: DateTimePickerEvent,
     selectedDate?: Date,
   ) => {
-    if (isAndroid) {
+    if (event.type === 'dismissed' || isAndroid) {
       setShowPicker(false);
     }
 

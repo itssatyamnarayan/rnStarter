@@ -21,7 +21,7 @@ const HeaderBackButton = ({ onPress }: { onPress: () => void }) => {
       <AppImage
         source={GlobalImage.back}
         style={styles.backIcon}
-        tintColor={color.textPrimary}
+        tintColor={color.text_primary}
       />
     </Pressable>
   );

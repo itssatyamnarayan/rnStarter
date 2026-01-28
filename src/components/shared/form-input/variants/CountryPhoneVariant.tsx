@@ -86,7 +86,6 @@ const CountryPhoneVariant = forwardRef<IPhoneInputRef, CountryPhoneVisualProps>(
             styles.callingCode,
             {
               color: color.text_primary,
-              fontFamily: FontFamily.InterTightRegular,
             },
           ],
           input: [styles.input, { color: color.text_primary }],
