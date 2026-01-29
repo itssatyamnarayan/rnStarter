@@ -31,12 +31,7 @@ const Signup = ({ navigation }: Props) => {
   };
 
   return (
-    <SafeAreaView
-      style={[
-        layout.flexContainer,
-        { backgroundColor: color.background_primary },
-      ]}
-    >
+    <SafeAreaView style={layout.flexContainer}>
       <CustomText
         variant="header"
         weight="600"

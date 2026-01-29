@@ -3,7 +3,6 @@ export const AuthRoutes = {
   SIGNUP: 'Signup',
   FORGOT_PASSWORD: 'ForgotPassword',
   VERIFY_EMAIL: 'VerifyEmail',
-  PROFILE_SETUP: 'ProfileSetup',
   RESET_PASSWORD: 'ResetPassword',
 } as const;
 

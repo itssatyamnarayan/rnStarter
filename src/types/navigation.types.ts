@@ -14,7 +14,6 @@ export type AuthStackParamList = {
   Signup: undefined;
   ForgotPassword: undefined;
   VerifyEmail: undefined;
-  ProfileSetup: undefined;
   ResetPassword: undefined;
 };
 
@@ -33,6 +32,8 @@ export type BottomTabParamList = {
 
 export type AppStackParamList = {
   MainTabs: undefined;
+  ProfileSetup: undefined;
+  BottomTabs: undefined;
 };
 
 // ============================================================================

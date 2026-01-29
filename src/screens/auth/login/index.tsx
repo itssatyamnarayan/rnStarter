@@ -9,6 +9,8 @@ import { useTranslation } from 'react-i18next';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { View } from 'react-native';
 import { layout } from '@/theme/layout';
+import { useAppDispatch } from '@/hooks/useAppDispatch';
+import { loginAction } from '@/redux/slice/auth.slice';
 
 type Props = AuthStackScreenProps<'Login'>;
 
@@ -25,6 +27,7 @@ const Login = ({ navigation }: Props) => {
 
   const { color } = useAppTheme();
   const { t } = useTranslation();
+  const dispatch = useAppDispatch();
 
   const onNavigateToSignup = () => {
     navigation.navigate('Signup');
@@ -34,19 +37,11 @@ const Login = ({ navigation }: Props) => {
   };
 
   const handleLogin = () => {
-    navigation.reset({
-      index: 0,
-      routes: [{ name: 'ProfileSetup' }],
-    });
+    dispatch(loginAction({ access_token: 'dummy_token' }));
   };
 
   return (
-    <SafeAreaView
-      style={[
-        layout.flexContainer,
-        { backgroundColor: color.background_primary },
-      ]}
-    >
+    <SafeAreaView style={layout.flexContainer}>
       <CustomText
         variant="header"
         weight="600"

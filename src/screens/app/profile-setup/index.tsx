@@ -1,16 +1,12 @@
 import CustomButton from '@/components/shared/CustomButton';
 import FormInput from '@/components/shared/form-input/FormInput';
-import { useAppTheme } from '@/context/ThemeContext';
-import { AuthStackScreenProps } from '@/types/navigation.types';
+import { layout } from '@/theme/layout';
+import { AppStackScreenProps } from '@/types/navigation.types';
 import React from 'react';
 import { useForm } from 'react-hook-form';
-import { layout } from '@/theme/layout';
 import { View } from 'react-native';
-import { useAppDispatch } from '@/hooks/useAppDispatch';
-import { loginAction } from '@/redux/slice/auth.slice';
-import { persistor } from '@/store';
 
-type Props = AuthStackScreenProps<'ProfileSetup'>;
+type Props = AppStackScreenProps<'ProfileSetup'>;
 
 interface ProfileSetupFormType {
   name: string;
@@ -22,7 +18,7 @@ interface ProfileSetupFormType {
   profilePicture: string;
 }
 
-const ProfileSetup = ({}: Props) => {
+const ProfileSetup = ({ navigation }: Props) => {
   const {
     control,
     formState: { errors },
@@ -33,33 +29,24 @@ const ProfileSetup = ({}: Props) => {
       currentTime: undefined,
     },
   });
-  const dispatch = useAppDispatch();
-
-  const { color } = useAppTheme();
 
   const handleContinue = async (data: ProfileSetupFormType) => {
     console.log('Profile Data:', {
       ...data,
-      dob: data.dob.toISOString(),
-      currentTime: data.currentTime.toISOString(),
+      // dob: data.dob.toISOString(),
+      // currentTime: data.currentTime.toISOString(),
     });
-    dispatch(loginAction());
-    await persistor.purge();
+    navigation.replace('BottomTabs');
   };
   return (
-    <View
-      style={[
-        layout.flexContainer,
-        { backgroundColor: color.background_primary },
-      ]}
-    >
+    <View style={layout.flexContainer}>
       <FormInput
         control={control}
         name="name"
-        rules={{ required: 'Name is required' }}
+        // rules={{ required: 'Name is required' }}
         label="Name"
         placeholder="Enter your name"
-        error={errors.name?.message}
+        // error={errors.name?.message}
         variant="text"
         // leftIcon={<Icon name="downArrow" size={20} />}
         // rightIcon={<Icon name="downArrow" size={20} />}
@@ -69,10 +56,10 @@ const ProfileSetup = ({}: Props) => {
       <FormInput
         control={control}
         name="phoneNumber"
-        rules={{ required: true }}
+        // rules={{ required: true }}
         label="Phone Number"
         placeholder="Enter your phone number"
-        error={errors.phoneNumber?.message}
+        // error={errors.phoneNumber?.message}
         variant="country-phone"
         // showFlag={false}
       />
@@ -80,9 +67,9 @@ const ProfileSetup = ({}: Props) => {
       <FormInput
         control={control}
         name="gender"
-        rules={{ required: true }}
+        // rules={{ required: true }}
         label="Gender"
-        error={errors.gender?.message}
+        // error={errors.gender?.message}
         variant="dropdown"
         dropdownData={[
           { label: 'Male', value: 'male' },
@@ -94,10 +81,10 @@ const ProfileSetup = ({}: Props) => {
       <FormInput
         control={control}
         name="dob"
-        rules={{ required: true }}
+        // rules={{ required: true }}
         label="Date of Birth"
         placeholder="Select your date of birth"
-        error={errors.dob?.message}
+        // error={errors.dob?.message}
         variant="date"
         maximumDate={new Date()}
         // disabled
@@ -106,20 +93,20 @@ const ProfileSetup = ({}: Props) => {
       <FormInput
         control={control}
         name="currentTime"
-        rules={{ required: true }}
+        // rules={{ required: true }}
         label="Current Time"
         placeholder="Enter your current time"
-        error={errors.currentTime?.message}
+        // error={errors.currentTime?.message}
         variant="time"
         iconName="clock"
       />
       <FormInput
         control={control}
         name="address"
-        rules={{ required: true }}
+        // rules={{ required: true }}
         label="Address"
         placeholder="Enter your address"
-        error={errors.address?.message}
+        // error={errors.address?.message}
         variant="text"
       />
 
