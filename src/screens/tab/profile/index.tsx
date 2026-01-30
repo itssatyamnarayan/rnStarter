@@ -1,14 +1,28 @@
+import CustomButton from '@/components/shared/CustomButton';
+import CustomText from '@/components/shared/CustomText';
+import { layout } from '@/theme/layout';
 import { TabScreenProps } from '@/types/navigation.types';
 import React from 'react';
-import { View, Text } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 type props = TabScreenProps<'Profile'>;
 
-const Profile = ({}: props) => {
+const Profile = ({ navigation }: props) => {
+  const handlePress = () => {
+    navigation.navigate('MainTabs');
+  };
+
   return (
-    <View>
-      <Text>Profile Screen</Text>
-    </View>
+    <SafeAreaView>
+      <CustomText
+        variant="header"
+        textAlign="center"
+        style={layout.marginTopMd}
+      >
+        Profile Screen
+      </CustomText>
+      <CustomButton title="Go to Main Tab" onPress={handlePress} />
+    </SafeAreaView>
   );
 };
 

@@ -1,5 +1,7 @@
 import CustomButton from '@/components/shared/CustomButton';
 import FormInput from '@/components/shared/form-input/FormInput';
+import { useAppDispatch } from '@/hooks/useAppDispatch';
+import { setUserAction } from '@/redux/slice/user.slice';
 import { layout } from '@/theme/layout';
 import { AppStackScreenProps } from '@/types/navigation.types';
 import React from 'react';
@@ -29,6 +31,7 @@ const ProfileSetup = ({ navigation }: Props) => {
       currentTime: undefined,
     },
   });
+  const dispatch = useAppDispatch();
 
   const handleContinue = async (data: ProfileSetupFormType) => {
     console.log('Profile Data:', {
@@ -36,7 +39,10 @@ const ProfileSetup = ({ navigation }: Props) => {
       // dob: data.dob.toISOString(),
       // currentTime: data.currentTime.toISOString(),
     });
-    navigation.replace('BottomTabs');
+    dispatch(setUserAction({ id: 'user-id', isProfileSetup: true }));
+    navigation.replace('BottomTabs', {
+      screen: 'Home',
+    });
   };
   return (
     <View style={layout.flexContainer}>

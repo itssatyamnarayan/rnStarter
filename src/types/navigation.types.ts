@@ -1,5 +1,6 @@
 import {
   createNavigationContainerRef,
+  NavigatorScreenParams,
   type CompositeScreenProps,
 } from '@react-navigation/native';
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
@@ -33,7 +34,7 @@ export type BottomTabParamList = {
 export type AppStackParamList = {
   MainTabs: undefined;
   ProfileSetup: undefined;
-  BottomTabs: undefined;
+  BottomTabs: NavigatorScreenParams<BottomTabParamList>;
 };
 
 // ============================================================================

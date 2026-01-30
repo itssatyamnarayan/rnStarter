@@ -1,3 +1,7 @@
+import {
+  renderHomeIcon,
+  renderProfileIcon,
+} from '@/components/shared/navigation/tabIconRender';
 import { useAppTheme } from '@/context/ThemeContext';
 import { Home, Profile } from '@/screens/tab';
 import { FontFamily } from '@/theme';
@@ -9,12 +13,13 @@ const Tabs = createBottomTabNavigator<BottomTabParamList>();
 
 const AppBottomTabs = () => {
   const { color } = useAppTheme();
+
   return (
     <Tabs.Navigator
       initialRouteName="Home"
       screenOptions={{
         headerTitleAlign: 'center',
-        headerShown: true,
+        headerShown: false,
         headerTitleStyle: {
           fontFamily: FontFamily.InterTightMedium,
           color: color.text_primary,
@@ -25,11 +30,34 @@ const AppBottomTabs = () => {
           layout.flex,
         ],
         headerStyle: { backgroundColor: color.background_secondary },
-        tabBarStyle: { backgroundColor: color.background_secondary },
+        tabBarStyle: {
+          backgroundColor: color.background_secondary,
+          height: 80,
+          paddingTop: 8,
+        },
+        tabBarAllowFontScaling: false,
+        tabBarActiveTintColor: color.secondary,
+        tabBarInactiveTintColor: color.text_secondary,
+        tabBarLabelStyle: {
+          fontFamily: FontFamily.InterTightRegular,
+          fontSize: 12,
+        },
       }}
     >
-      <Tabs.Screen name="Home" component={Home} />
-      <Tabs.Screen name="Profile" component={Profile} />
+      <Tabs.Screen
+        name="Home"
+        component={Home}
+        options={{
+          tabBarIcon: renderHomeIcon,
+        }}
+      />
+      <Tabs.Screen
+        name="Profile"
+        component={Profile}
+        options={{
+          tabBarIcon: renderProfileIcon,
+        }}
+      />
     </Tabs.Navigator>
   );
 };

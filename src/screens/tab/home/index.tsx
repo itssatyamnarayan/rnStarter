@@ -1,14 +1,22 @@
+import CustomText from '@/components/shared/CustomText';
+import { layout } from '@/theme/layout';
 import { TabScreenProps } from '@/types/navigation.types';
 import React from 'react';
-import { View, Text } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 type props = TabScreenProps<'Home'>;
 
 const Home = ({}: props) => {
   return (
-    <View>
-      <Text>Home Screen</Text>
-    </View>
+    <SafeAreaView>
+      <CustomText
+        variant="header"
+        textAlign="center"
+        style={layout.marginTopMd}
+      >
+        Home Screen
+      </CustomText>
+    </SafeAreaView>
   );
 };
 

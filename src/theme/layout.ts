@@ -17,4 +17,6 @@ export const layout = StyleSheet.create({
   flexStart: { flex: 1, justifyContent: 'flex-start' },
   flex: { flex: 1 },
   separator: { height: 1, marginVertical: spacing.md },
+  marginTopMd: { marginTop: spacing.md },
+  marginBottomMd: { marginBottom: spacing.md },
 });

@@ -1,8 +1,10 @@
 import { combineReducers } from '@reduxjs/toolkit';
 import authReducer from '@/redux/slice/auth.slice';
+import userReducer from '@/redux/slice/user.slice';
 
 const appReducer = combineReducers({
   auth: authReducer,
+  user: userReducer,
 });
 
 export const rootReducer = (

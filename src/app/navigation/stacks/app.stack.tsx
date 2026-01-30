@@ -6,14 +6,16 @@ import { layout } from '@/theme/layout';
 import { AppStackParamList } from '@/types/navigation.types';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import AppBottomTabs from './app.tab';
+import { useAppSelector } from '@/hooks/useAppSelector';
 
 const Stack = createNativeStackNavigator<AppStackParamList>();
 
 const AppStack = () => {
   const { color } = useAppTheme();
+  const { isProfileSetup } = useAppSelector(state => state.user);
   return (
     <Stack.Navigator
-      initialRouteName="ProfileSetup"
+      initialRouteName={isProfileSetup ? 'BottomTabs' : 'ProfileSetup'}
       screenOptions={{
         headerTitleAlign: 'center',
         headerShown: true,
