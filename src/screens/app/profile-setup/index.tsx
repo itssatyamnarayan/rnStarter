@@ -1,24 +1,22 @@
 import CustomButton from '@/components/shared/CustomButton';
 import FormInput from '@/components/shared/form-input/FormInput';
+import { LIMITS } from '@/constants/limits';
 import { useAppDispatch } from '@/hooks/useAppDispatch';
 import { setUserAction } from '@/redux/slice/user.slice';
 import { layout } from '@/theme/layout';
 import { AppStackScreenProps } from '@/types/navigation.types';
+import { profileSetupSchema } from '@/validation/schema/user.schema';
+import { tValError } from '@/validation/tValError';
+import { yupResolver } from '@hookform/resolvers/yup';
 import React from 'react';
-import { useForm } from 'react-hook-form';
+import { Resolver, useForm } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
 import { View } from 'react-native';
+import { InferType } from 'yup';
 
 type Props = AppStackScreenProps<'ProfileSetup'>;
 
-interface ProfileSetupFormType {
-  name: string;
-  phoneNumber: string;
-  gender: string;
-  address: string;
-  dob: Date;
-  currentTime: Date;
-  profilePicture: string;
-}
+export type ProfileSetupFormType = InferType<typeof profileSetupSchema>;
 
 const ProfileSetup = ({ navigation }: Props) => {
   const {
@@ -30,14 +28,16 @@ const ProfileSetup = ({ navigation }: Props) => {
       dob: undefined,
       currentTime: undefined,
     },
+    resolver: yupResolver(profileSetupSchema) as Resolver<ProfileSetupFormType>,
   });
   const dispatch = useAppDispatch();
+  const { t } = useTranslation();
 
   const handleContinue = async (data: ProfileSetupFormType) => {
     console.log('Profile Data:', {
       ...data,
-      // dob: data.dob.toISOString(),
-      // currentTime: data.currentTime.toISOString(),
+      dob: data.dob.toISOString(),
+      currentTime: data.currentTime.toISOString(),
     });
     dispatch(setUserAction({ id: 'user-id', isProfileSetup: true }));
     navigation.replace('BottomTabs', {
@@ -49,10 +49,12 @@ const ProfileSetup = ({ navigation }: Props) => {
       <FormInput
         control={control}
         name="name"
-        // rules={{ required: 'Name is required' }}
-        label="Name"
-        placeholder="Enter your name"
-        // error={errors.name?.message}
+        label={t('user.name')}
+        placeholder={t('placeholder.enterName')}
+        error={tValError(t, errors.name, {
+          field: t('user.name'),
+          ...LIMITS.NAME,
+        })}
         variant="text"
         // leftIcon={<Icon name="downArrow" size={20} />}
         // rightIcon={<Icon name="downArrow" size={20} />}
@@ -61,36 +63,45 @@ const ProfileSetup = ({ navigation }: Props) => {
 
       <FormInput
         control={control}
-        name="phoneNumber"
-        // rules={{ required: true }}
-        label="Phone Number"
-        placeholder="Enter your phone number"
-        // error={errors.phoneNumber?.message}
+        name="phone"
+        label={t('user.phone-number')}
+        placeholder={t('placeholder.enterPhone')}
+        error={tValError(t, errors.phone, {
+          field: t('user.phone-number'),
+          ...LIMITS.PHONE,
+        })}
         variant="country-phone"
         // showFlag={false}
+        // onChangeSelectedCountry={country => {
+        //   console.log('Country:', country);
+        //   console.log('Calling code:', country.idd.root); // ← "+91"
+        //   console.log('ISO code:', country.cca2); // ← "IN"
+        // }}
       />
 
       <FormInput
         control={control}
         name="gender"
-        // rules={{ required: true }}
-        label="Gender"
-        // error={errors.gender?.message}
+        label={t('user.gender')}
+        error={tValError(t, errors.gender, {
+          field: t('user.gender'),
+        })}
         variant="dropdown"
         dropdownData={[
           { label: 'Male', value: 'male' },
           { label: 'Female', value: 'female' },
           { label: 'Other', value: 'other' },
         ]}
-        placeholder="Select your gender"
+        placeholder={t('placeholder.select-your-gender')}
       />
       <FormInput
         control={control}
         name="dob"
-        // rules={{ required: true }}
-        label="Date of Birth"
-        placeholder="Select your date of birth"
-        // error={errors.dob?.message}
+        label={t('user.date-of-birth')}
+        placeholder={t('placeholder.select-your-date-of-birth')}
+        error={tValError(t, errors.dob, {
+          field: t('user.date-of-birth'),
+        })}
         variant="date"
         maximumDate={new Date()}
         // disabled
@@ -99,25 +110,28 @@ const ProfileSetup = ({ navigation }: Props) => {
       <FormInput
         control={control}
         name="currentTime"
-        // rules={{ required: true }}
-        label="Current Time"
-        placeholder="Enter your current time"
-        // error={errors.currentTime?.message}
+        label={t('user.current-time')}
+        placeholder={t('placeholder.enter-your-current-time')}
+        error={tValError(t, errors.currentTime, {
+          field: t('user.current-time'),
+        })}
         variant="time"
         iconName="clock"
       />
       <FormInput
         control={control}
         name="address"
-        // rules={{ required: true }}
-        label="Address"
-        placeholder="Enter your address"
-        // error={errors.address?.message}
+        label={t('user.address')}
+        placeholder={t('user.enter-your-address')}
+        error={tValError(t, errors.address, {
+          field: t('user.address'),
+          ...LIMITS.ADDRESS,
+        })}
         variant="text"
       />
 
       <CustomButton
-        title="Continue"
+        title={t('common.continue')}
         onPress={handleSubmit(handleContinue)}
         variant="primary"
         fullWidth

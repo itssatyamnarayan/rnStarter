@@ -1,5 +1,7 @@
 export const REGEX = {
+  HAS_LETTER: /[a-zA-Z]/,
+  ZIP_CODE: /^[A-Za-z0-9\s]+$/,
+  PHONE: /^\d+$/,
   EMAIL: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
-  PASSWORD: /^(?=.*[A-Z])(?=.*\d).{8,}$/,
-  PHONE: /^[6-9]\d{9}$/,
+  STRONG_PASSWORD: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&]).{8,}$/,
 };

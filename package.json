@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@d11/react-native-fast-image": "^8.13.0",
+    "@hookform/resolvers": "^5.2.2",
     "@mhpdev/react-native-haptics": "^1.0.1",
     "@react-native-community/datetimepicker": "^8.6.0",
     "@react-native/new-app-screen": "0.83.1",
@@ -37,7 +38,8 @@
     "react-native-walkthrough-tooltip": "^1.6.0",
     "react-native-worklets": "^0.7.2",
     "react-redux": "^9.2.0",
-    "redux-persist": "^6.0.0"
+    "redux-persist": "^6.0.0",
+    "yup": "^1.7.1"
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",

@@ -19,7 +19,8 @@
     "close": "Close",
     "search": "Search",
     "noResults": "No results found",
-    "emptyState": "Nothing here yet"
+    "emptyState": "Nothing here yet",
+    "continue": "Continue"
   },
   "auth": {
     "login": "Login",
@@ -30,37 +31,12 @@
     "confirmPassword": "Confirm Password",
     "forgotPassword": "Forgot Password?",
     "resetPassword": "Reset Password",
-    "firstName": "First Name",
-    "lastName": "Last Name",
-    "phone": "Phone Number",
     "rememberMe": "Remember me",
     "dontHaveAccount": "Don't have an account?",
     "alreadyHaveAccount": "Already have an account?",
     "createAccount": "Create Account",
     "welcomeBack": "Welcome back!",
     "signInToContinue": "Sign in to continue",
-    "enterEmail": "Enter your email",
-    "enterPassword": "Enter your password",
-    "enterNewPassword": "Enter new password",
-    "passwordRequirements": "Password must be at least 8 characters",
-    "passwordsDoNotMatch": "Passwords do not match",
-    "invalidEmail": "Please enter a valid email",
-    "loginSuccess": "Successfully logged in",
-    "signupSuccess": "Account created successfully",
-    "logoutSuccess": "Successfully logged out",
-    "resetPasswordSent": "Password reset instructions sent to your email",
-    "verifyEmail": "Verify Email",
-    "enterVerificationCode": "Enter the verification code sent to your email",
-    "verificationCode": "Verification Code",
-    "resendCode": "Resend Code",
-    "didntReceiveCode": "Didn't receive the code?",
-    "codeResent": "Verification code resent",
-    "emailVerified": "Email verified successfully",
-    "setupProfile": "Setup Profile",
-    "completeProfile": "Complete your profile",
-    "addPhoto": "Add Photo",
-    "bio": "Bio",
-    "tellUsAboutYourself": "Tell us about yourself",
     "welcome-back": "Welcome Back 👋",
     "reset": "Reset",
     "dont-have-an-account": "Don’t have an account?",
@@ -70,6 +46,15 @@
     "privacy-policy": "Privacy Policy",
     "lets-get-started": "Let’s Get Started 🚀",
     "send-now": "Send Now"
+  },
+  "user": {
+    "name": "Name",
+    "phone-number": "Phone number",
+    "gender": "Gender",
+    "date-of-birth": "Date of Birth",
+    "current-time": "Current time",
+    "address": "Address",
+    "enter-your-address": "Enter your address"
   },
   "navigation": {
     "home": "Home",
@@ -126,14 +111,15 @@
     "rateLimited": "Too many attempts. Please try again later."
   },
   "validation": {
-    "required": "This field is required",
-    "emailInvalid": "Please enter a valid email address",
-    "passwordTooShort": "Password must be at least {{min}} characters",
-    "passwordTooWeak": "Password must contain at least one uppercase letter, one lowercase letter, and one number",
-    "passwordsDoNotMatch": "Passwords do not match",
-    "phoneInvalid": "Please enter a valid phone number",
-    "minLength": "Must be at least {{min}} characters",
-    "maxLength": "Must be no more than {{max}} characters"
+    "required": "{{field}} is required",
+    "minLength": "{{field}} must be at least {{min}} characters",
+    "maxLength": "{{field}} must be at most {{max}} characters",
+    "invalidEmail": "Please enter a valid email address",
+    "invalidPhone": "Please enter a valid phone number",
+    "hasLetter": "{{field}} must contain at least one letter",
+    "invalidZip": "Invalid zip code",
+    "strongPassword": "Password must include upper, lower, number & symbol",
+    "selectOption": "Please select an option for {{field}}"
   },
   "alerts": {
     "logoutTitle": "Logout",
@@ -142,5 +128,15 @@
     "deleteMessage": "Are you sure you want to delete this item?",
     "unsavedChangesTitle": "Unsaved Changes",
     "unsavedChangesMessage": "You have unsaved changes. Are you sure you want to leave?"
+  },
+  "placeholder": {
+    "search": "Search...",
+    "enterEmail": "Enter your email",
+    "enterPassword": "Enter your password",
+    "enterName": "Enter your name",
+    "enterPhone": "Enter your phone number",
+    "select-your-gender": "Select your gender",
+    "select-your-date-of-birth": "Select your date of birth",
+    "enter-your-current-time": "Enter your current time"
   }
 }

@@ -6,39 +6,49 @@ import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { layout } from '@/theme/layout';
 import { View } from 'react-native';
+import { InferType } from 'yup';
+import { forgotPasswordSchema } from '@/validation/schema/auth.schema';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { tValError } from '@/validation/tValError';
 
 type Props = AuthStackScreenProps<'ForgotPassword'>;
 
-interface ForgotPasswordFormType {
-  email: string;
-}
+export type ForgotPasswordFormType = InferType<typeof forgotPasswordSchema>;
 
-const ForgotPassword = ({}: Props) => {
+const ForgotPassword = ({ navigation }: Props) => {
   const {
     control,
     formState: { errors },
-  } = useForm<ForgotPasswordFormType>();
+    handleSubmit,
+  } = useForm<ForgotPasswordFormType>({
+    resolver: yupResolver(forgotPasswordSchema),
+  });
 
   const { t } = useTranslation();
+
+  const handleForgotPassword = () => {
+    navigation.goBack();
+  };
 
   return (
     <View style={layout.flexContainer}>
       <FormInput
         control={control}
         name="email"
-        rules={{ required: true }}
         label={t('auth.email')}
-        placeholder={t('auth.enterEmail')}
+        placeholder={t('placeholder.enterEmail')}
         textInputProps={{
           keyboardType: 'email-address',
         }}
-        error={errors.email?.message}
+        error={tValError(t, errors.email, {
+          field: t('auth.email'),
+        })}
         variant="text"
       />
 
       <CustomButton
         title={t('auth.send-now')}
-        onPress={() => {}}
+        onPress={handleSubmit(handleForgotPassword)}
         variant="primary"
         fullWidth
       />

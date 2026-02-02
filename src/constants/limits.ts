@@ -1,4 +1,9 @@
 export const LIMITS = {
-  MAX_USERNAME_LENGTH: 30,
-  MIN_PASSWORD_LENGTH: 8,
-};
+  EMAIL: { min: 5, max: 255 },
+  NAME: { min: 1, max: 100 },
+  DESCRIPTION: { min: 1, max: 5000 },
+  ADDRESS: { min: 1, max: 255 },
+  ZIP_CODE: { max: 20 },
+  PASSWORD: { min: 8, max: 16 },
+  PHONE: { min: 7, max: 15 },
+} as const;

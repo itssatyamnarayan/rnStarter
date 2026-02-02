@@ -9,19 +9,24 @@ import { useTranslation } from 'react-i18next';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { View } from 'react-native';
 import { layout } from '@/theme/layout';
+import { InferType } from 'yup';
+import { registerSchema } from '@/validation/schema/auth.schema';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { tValError } from '@/validation/tValError';
+import { LIMITS } from '@/constants/limits';
 
 type Props = AuthStackScreenProps<'Signup'>;
 
-interface SignupFormType {
-  email: string;
-  password: string;
-}
+export type RegisterFormType = InferType<typeof registerSchema>;
 
 const Signup = ({ navigation }: Props) => {
   const {
     control,
     formState: { errors },
-  } = useForm<SignupFormType>();
+    handleSubmit,
+  } = useForm<RegisterFormType>({
+    resolver: yupResolver(registerSchema),
+  });
 
   const { color } = useAppTheme();
   const { t } = useTranslation();
@@ -43,30 +48,34 @@ const Signup = ({ navigation }: Props) => {
       <FormInput
         control={control}
         name="email"
-        rules={{ required: true }}
-        placeholder={t('auth.enterEmail')}
+        placeholder={t('placeholder.enterEmail')}
         label={t('auth.email')}
         textInputProps={{
           keyboardType: 'email-address',
         }}
-        error={errors.email?.message}
+        error={tValError(t, errors.email, {
+          field: t('auth.email'),
+          ...LIMITS.EMAIL,
+        })}
         variant="text"
       />
 
       <FormInput
         control={control}
         name="password"
-        rules={{ required: true }}
         label={t('auth.password')}
-        placeholder={t('auth.enterPassword')}
-        error={errors.password?.message}
+        placeholder={t('placeholder.enterPassword')}
         isPassword
         variant="text"
+        error={tValError(t, errors.password, {
+          field: t('auth.password'),
+          ...LIMITS.PASSWORD,
+        })}
       />
 
       <CustomButton
         title={t('auth.create-account')}
-        onPress={() => {}}
+        onPress={handleSubmit(onNavigateToLogin)}
         variant="primary"
         fullWidth
       />

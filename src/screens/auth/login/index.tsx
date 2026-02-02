@@ -11,19 +11,24 @@ import { View } from 'react-native';
 import { layout } from '@/theme/layout';
 import { useAppDispatch } from '@/hooks/useAppDispatch';
 import { loginAction } from '@/redux/slice/auth.slice';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { loginSchema } from '@/validation/schema/auth.schema';
+import { tValError } from '@/validation/tValError';
+import { InferType } from 'yup';
+import { LIMITS } from '@/constants/limits';
 
 type Props = AuthStackScreenProps<'Login'>;
 
-interface LoginFormType {
-  email: string;
-  password: string;
-}
+export type LoginFormType = InferType<typeof loginSchema>;
 
 const Login = ({ navigation }: Props) => {
   const {
     control,
     formState: { errors },
-  } = useForm<LoginFormType>();
+    handleSubmit,
+  } = useForm<LoginFormType>({
+    resolver: yupResolver(loginSchema),
+  });
 
   const { color } = useAppTheme();
   const { t } = useTranslation();
@@ -53,13 +58,16 @@ const Login = ({ navigation }: Props) => {
       <FormInput
         control={control}
         name="email"
-        rules={{ required: true }}
+        //If you don't want to use validation schema, you can add rules like this
+        // rules={rules.email}
         label={t('auth.email')}
-        placeholder={t('auth.enterEmail')}
+        placeholder={t('placeholder.enterEmail')}
         textInputProps={{
           keyboardType: 'email-address',
         }}
-        error={errors.email?.message}
+        error={tValError(t, errors.email, {
+          field: t('auth.email'),
+        })}
         variant="text"
         isTooltip
         tooltipMessage='We"ll never share your email with anyone else.'
@@ -68,10 +76,12 @@ const Login = ({ navigation }: Props) => {
       <FormInput
         control={control}
         name="password"
-        rules={{ required: true }}
         label={t('auth.password')}
-        placeholder={t('auth.enterPassword')}
-        error={errors.password?.message}
+        placeholder={t('placeholder.enterPassword')}
+        error={tValError(t, errors.password, {
+          field: t('auth.password'),
+          ...LIMITS.PASSWORD,
+        })}
         isPassword
         variant="text"
         // isTooltip
@@ -80,7 +90,7 @@ const Login = ({ navigation }: Props) => {
 
       <CustomButton
         title={t('auth.login')}
-        onPress={handleLogin}
+        onPress={handleSubmit(handleLogin)}
         variant="primary"
         fullWidth
       />
