@@ -1,15 +1,19 @@
-import { StatusBar, useColorScheme } from 'react-native';
+import { StatusBar } from 'react-native';
 import { AppProviders } from './providers';
 import { RootNavigator } from './navigation/root';
 import '@/i18n';
+import Toast from 'react-native-toast-message';
+import { useAppTheme } from '@/context/ThemeContext';
+import { toastConfig } from '@/components/ui/toast/ToastConfig';
 
 const App = () => {
-  const isDarkMode = useColorScheme() === 'dark';
+  const { theme } = useAppTheme();
 
   return (
     <AppProviders>
-      <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
+      <StatusBar barStyle={theme ? 'light-content' : 'dark-content'} />
       <RootNavigator />
+      <Toast config={toastConfig} />
     </AppProviders>
   );
 };

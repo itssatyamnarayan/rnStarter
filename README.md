@@ -1,18 +1,20 @@
 # React Native Starter Kit
 
-A comprehensive React Native starter template with pre-configured features and reusable components to accelerate your development workflow. This kit includes authentication, navigation, theming, internationalization, form handling, and much more out of the box.
+A comprehensive React Native starter template with pre-configured features and reusable components to accelerate your development workflow. This kit includes authentication, navigation, theming, internationalization, form handling, Redux state management, and much more out of the box.
+
+---
 
 ## 🚀 Features
 
 - ✅ **Navigation Setup** - React Navigation with Stack & Tab navigation pre-configured
-- ✅ **Theme System** - Dark/Light mode with custom theme support
+- ✅ **Theme System** - Dark/Light/System mode with custom theme support
 - ✅ **Authentication** - Complete auth flow with login/signup screens
 - ✅ **Internationalization (i18n)** - Multi-language support with react-i18next
 - ✅ **Form Handling** - React Hook Form integration with custom form components
-- ✅ **State Management** - Custom stores for auth and network state
+- ✅ **Redux State Management** - Redux Toolkit with type-safe hooks and persistence
+- ✅ **Validation System** - Dual approach: Rule-based & Schema-based (Yup) validation
 - ✅ **Custom Components** - Reusable UI components (Buttons, Inputs, Dropdowns, etc.)
 - ✅ **Network Monitoring** - Built-in network connectivity detection
-- ✅ **Custom Hooks** - Useful hooks (useDebounce, useThrottle, useLoading, etc.)
 - ✅ **SVG Support** - SVG icons with auto-generation script
 - ✅ **Google Fonts** - Custom font support for Android and iOS
 - ✅ **TypeScript** - Full TypeScript support with path aliases
@@ -30,9 +32,17 @@ rnStarter/
 │   │   ├── App.tsx
 │   │   ├── providers.tsx
 │   │   └── navigation/         # Navigation configuration
-│   ├── assets/                 # Images, fonts, and icons
+│   │       └── stacks/
+│   │           ├── app.stack.tsx
+│   │           ├── app.tab.tsx
+│   │           └── auth.stack.tsx
+│   ├── assets/                 # Static assets
 │   │   ├── fonts/              # Custom fonts
-│   │   └── icons/              # SVG icons
+│   │   ├── icons/              # General SVG icons
+│   │   │   ├── tabs/           # Tab-specific icons (light/dark variants)
+│   │   │   └── index.ts        # Auto-generated icon exports
+│   │   ├── images/             # Image assets
+│   │   └── lottie/             # Lottie animations
 │   ├── components/             # Reusable components
 │   │   └── shared/
 │   │       ├── CustomButton.tsx
@@ -41,26 +51,41 @@ rnStarter/
 │   │       ├── Icon.tsx
 │   │       ├── bottom-sheet/
 │   │       ├── dropdown/
-│   │       ├── form-input/     # Form input components
+│   │       ├── form-input/     # FormInput component with variants
+│   │       │   └── variants/
+│   │       │       ├── CountryPhoneVariant.tsx
+│   │       │       ├── DateTimeVariant.tsx
+│   │       │       ├── DropdownVariant.tsx
+│   │       │       ├── TextInputVariant.tsx
+│   │       │       └── ToggleVariant.tsx
 │   │       ├── loader/
 │   │       ├── modal/
-│   │       └── network-aware-view/
+│   │       ├── navigation/     # Navigation-related shared components
+│   │       │   ├── AnimatedTabIcon.tsx
+│   │       │   ├── HeaderActionButton.tsx
+│   │       │   ├── HeaderBackButton.tsx
+│   │       │   └── tabIconRender.tsx
+│   │       ├── network-aware-view/
+│   │       ├── network-provider/
+│   │       └── no-internet/
 │   ├── constants/              # App constants
 │   │   ├── device.ts
 │   │   ├── limits.ts
-│   │   ├── regex.ts
-│   │   └── routes.ts
+│   │   └── regex.ts
 │   ├── context/                # React Context providers
 │   │   └── ThemeContext.tsx
 │   ├── hooks/                  # Custom hooks
-│   │   ├── useDebounce.ts
-│   │   ├── useThrottle.ts
-│   │   ├── useLoading.ts
-│   │   └── useForm.ts
+│   │   ├── useAppDispatch.ts   # Type-safe Redux dispatch
+│   │   └── useAppSelector.ts   # Type-safe Redux selector
 │   ├── i18n/                   # Internationalization
 │   │   ├── index.ts
 │   │   ├── resources.ts
-│   │   └── locales/            # Translation files
+│   │   └── locales/            # Translation files (en.json, etc.)
+│   ├── redux/                  # Redux slices
+│   │   ├── selectors/          # Redux selectors
+│   │   └── slice/              # Redux slices
+│   │       ├── auth.slice.ts
+│   │       └── user.slice.ts
 │   ├── screens/                # Screen components
 │   │   ├── auth/               # Authentication screens
 │   │   ├── app/                # Main app screens
@@ -69,24 +94,56 @@ rnStarter/
 │   │   ├── api/
 │   │   ├── auth.api.ts
 │   │   └── user.api.ts
-│   ├── store/                  # State management
-│   │   ├── auth.store.ts
-│   │   └── network.store.ts
+│   ├── store/                  # Redux store configuration
+│   │   ├── index.ts            # Store setup
+│   │   ├── rootReducer.ts      # Root reducer combining all slices
+│   │   ├── persist.ts          # Redux persist configuration
+│   │   └── mmkv.ts             # MMKV storage adapter
 │   ├── theme/                  # Theme configuration
-│   │   ├── dark.ts
-│   │   ├── light.ts
+│   │   ├── dark.ts             # Dark theme colors & icons
+│   │   ├── light.ts            # Light theme colors & icons
 │   │   ├── fonts.ts
 │   │   ├── typography.ts
 │   │   ├── palette.ts
 │   │   ├── spacing.ts
 │   │   └── layout.ts
-│   ├── types/                  # TypeScript types
-│   └── utils/                  # Utility functions
-│       └── normalize.ts        # Responsive size normalization
+│   ├── types/                  # Global TypeScript types
+│   │   ├── api.types.ts
+│   │   ├── navigation.types.ts
+│   │   └── index.ts
+│   ├── utils/                  # Utility functions
+│   │   └── normalize.ts
+│   └── validation/             # Validation system
+│       ├── messages.ts         # i18n validation message keys
+│       ├── rules.ts            # Rule-based validation
+│       ├── tValError.ts        # Validation error translation helper
+│       └── schema/             # Schema-based validation (Yup)
+│           ├── auth.schema.ts
+│           └── user.schema.ts
 ├── scripts/
 │   └── generate-icons.js       # Auto-generate icon exports
 └── ...
 ```
+
+---
+
+## 🔄 Using This Starter Kit in Your Own Project
+
+If you want to use only the `src` folder and create your own React Native project:
+
+1. **Search for custom configurations:**
+
+   - Perform a global search for `(//by own)` in the codebase
+   - Copy all related configuration code into your new project
+
+2. **Files with custom configuration:**
+
+   - `babel.config.js` - Module resolver plugin
+   - `tsconfig.json` - TypeScript path mapping
+   - `metro.config.js` - Metro bundler & SVG transformer
+
+3. **Important Note:**
+   - If you use a newer React Native version and face compatibility issues, you must resolve them manually
 
 ---
 
@@ -129,11 +186,11 @@ rnStarter/
 
 ### 1. Path Aliases Setup
 
-Path aliases are already configured for cleaner imports. You can use `@/` to reference the `src` directory.
+Path aliases are configured for cleaner imports. Use `@/` to reference the `src` directory.
 
 **Files configured:** (Custom configuration marked with `//by own` comments)
 
-- **[babel.config.js](file:///Users/sstpc/Desktop/Satyam/Others/rnStarter/babel.config.js)** - Module resolver plugin configured
+- **babel.config.js** - Module resolver plugin
 
   ```javascript
   alias: {
@@ -141,7 +198,7 @@ Path aliases are already configured for cleaner imports. You can use `@/` to ref
   }
   ```
 
-- **[tsconfig.json](file:///Users/sstpc/Desktop/Satyam/Others/rnStarter/tsconfig.json)** - TypeScript path mapping
+- **tsconfig.json** - TypeScript path mapping
 
   ```json
   "paths": {
@@ -149,18 +206,18 @@ Path aliases are already configured for cleaner imports. You can use `@/` to ref
   }
   ```
 
-- **[metro.config.js](file:///Users/sstpc/Desktop/Satyam/Others/rnStarter/metro.config.js)** - Metro bundler resolver
+- **metro.config.js** - Metro bundler resolver
   ```javascript
   extraNodeModules: {
     '@': path.resolve(__dirname, 'src'),
   }
   ```
 
-### 2. Google Fonts Setup for Android and iOS
+### 2. Google Fonts Setup
 
 Custom fonts are located in `src/assets/fonts/`.
 
-**Configuration file:** [react-native.config.js](file:///Users/sstpc/Desktop/Satyam/Others/rnStarter/react-native.config.js)
+**Configuration file:** `react-native.config.js`
 
 ```javascript
 module.exports = {
@@ -172,13 +229,11 @@ module.exports = {
 };
 ```
 
-**Run this command to link fonts:**
+**Link fonts:**
 
 ```bash
-# For latest yarn
 yarn dlx react-native-asset
-
-# OR for npm
+# OR
 npx react-native-asset
 ```
 
@@ -188,63 +243,747 @@ npx react-native-asset
 npx react-native start --reset-cache
 ```
 
-### 3. SVG Icon Setup
-
-SVG support is configured using `react-native-svg` and `react-native-svg-transformer`.
-
-**Files configured:**
-
-- **[metro.config.js](file:///Users/sstpc/Desktop/Satyam/Others/rnStarter/metro.config.js)** - SVG transformer configuration
-- **[declarations.d.ts](file:///Users/sstpc/Desktop/Satyam/Others/rnStarter/declarations.d.ts)** - TypeScript declaration for SVG imports
-
-**Auto-generate icon exports:**
-
-Place your SVG files in `src/assets/icons/` and run:
-
-```bash
-yarn generate:icons
-# or
-npm run generate:icons
-```
-
-This will auto-generate an `index.ts` file with typed icon exports. See [scripts/generate-icons.js](file:///Users/sstpc/Desktop/Satyam/Others/rnStarter/scripts/generate-icons.js) for implementation.
-
-### 4. App Icon Setup
+### 3. App Icon Setup
 
 #### For Android
 
 **Option 1: Manual Copy**
 
-1. Go to [icon.kitchen](https://icon.kitchen) or [appicon.co](https://appicon.co) and create your icon
-2. Download and unzip the file
-3. Copy files from `android/res` in the downloaded folder
-4. Paste to `android/app/src/main/res` in your project
-5. Remove this line from `AndroidManifest.xml`:
-   ```xml
-   android:roundIcon="@mipmap/ic_launcher"
-   ```
-6. Refresh the app
+1. Generate icons at [icon.kitchen](https://icon.kitchen) or [appicon.co](https://appicon.co)
+2. Copy files from `android/res` in the downloaded folder to `android/app/src/main/res`
+3. Remove `android:roundIcon="@mipmap/ic_launcher"` from `AndroidManifest.xml`
+4. Rebuild the app
 
 **Option 2: Android Studio**
 
 1. Open project in Android Studio
 2. Go to `res` → Right click → New → Image Asset
-3. Paste your image path
-4. Follow the wizard
+3. Follow the wizard
 
 #### For iOS
 
-1. Unzip the downloaded file and navigate to iOS folder
-2. Run:
+1. Run `cd ios && xed .` to open Xcode
+2. Navigate to `YourProject/Images` → `AppIcon`
+3. Drag and drop images according to their pt size
+4. Set the 1024pt marketing image
+5. Uninstall and rebuild the app
+
+---
+
+## 🏪 Redux Store Setup
+
+Redux Toolkit is fully configured with persistence using MMKV storage.
+
+### Store Structure
+
+```
+src/
+├── redux/
+│   ├── slice/              # Create your slices here
+│   │   ├── auth.slice.ts
+│   │   └── user.slice.ts
+│   └── selectors/          # Redux selectors
+└── store/
+    ├── index.ts            # Store configuration
+    ├── rootReducer.ts      # Combines all reducers
+    ├── persist.ts          # Persistence configuration
+    └── mmkv.ts             # MMKV storage adapter
+```
+
+### Creating a New Slice
+
+Create slices in `src/redux/slice/`:
+
+```typescript
+// filepath: src/redux/slice/example.slice.ts
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+
+interface ExampleState {
+  data: string | null;
+  isLoading: boolean;
+}
+
+const initialState: ExampleState = {
+  data: null,
+  isLoading: false,
+};
+
+const exampleSlice = createSlice({
+  name: 'example',
+  initialState,
+  reducers: {
+    setData(state, action: PayloadAction<string>) {
+      state.data = action.payload;
+    },
+    setLoading(state, action: PayloadAction<boolean>) {
+      state.isLoading = action.payload;
+    },
+    resetExample() {
+      return initialState;
+    },
+  },
+});
+
+export const { setData, setLoading, resetExample } = exampleSlice.actions;
+export default exampleSlice.reducer;
+```
+
+### Registering a New Slice
+
+Add your new slice to `src/store/rootReducer.ts`:
+
+```typescript
+import { combineReducers } from '@reduxjs/toolkit';
+import authReducer from '@/redux/slice/auth.slice';
+import userReducer from '@/redux/slice/user.slice';
+import exampleReducer from '@/redux/slice/example.slice'; // Add this
+
+const appReducer = combineReducers({
+  auth: authReducer,
+  user: userReducer,
+  example: exampleReducer, // Add this
+});
+
+// ...rest of the file
+```
+
+### Type-Safe Redux Hooks
+
+> ⚠️ **IMPORTANT:** Always use `useAppDispatch` and `useAppSelector` instead of the standard React-Redux hooks. These are type-safe and ensure proper TypeScript inference.
+
+**Location:** `src/hooks/`
+
+```typescript
+// useAppDispatch.ts
+import { AppDispatch } from '@/store';
+import { useDispatch } from 'react-redux';
+
+export const useAppDispatch = () => {
+  return useDispatch<AppDispatch>();
+};
+
+// useAppSelector.ts
+import { RootStoreState } from '@/store/rootReducer';
+import { TypedUseSelectorHook, useSelector } from 'react-redux';
+
+export const useAppSelector: TypedUseSelectorHook<RootStoreState> = useSelector;
+```
+
+### Usage Example
+
+```tsx
+import { useAppDispatch } from '@/hooks/useAppDispatch';
+import { useAppSelector } from '@/hooks/useAppSelector';
+import { loginAction } from '@/redux/slice/auth.slice';
+
+const MyComponent = () => {
+  const dispatch = useAppDispatch();
+
+  // Type-safe state selection
+  const accessToken = useAppSelector(state => state.auth.access_token);
+  const isProfileSetup = useAppSelector(state => state.user.isProfileSetup);
+
+  const handleLogin = () => {
+    // Type-safe dispatch
+    dispatch(loginAction({ access_token: 'my_token' }));
+  };
+
+  return (/* ... */);
+};
+```
+
+---
+
+## ✅ Validation System
+
+The validation system supports **two approaches** for flexibility.
+
+### Validation Folder Structure
+
+```
+src/validation/
+├── messages.ts         # i18n validation message keys (NOT actual messages)
+├── rules.ts            # Rule-based validation for React Hook Form
+├── tValError.ts        # Translation helper for validation errors
+└── schema/             # Schema-based validation using Yup
+    ├── auth.schema.ts
+    └── user.schema.ts
+```
+
+---
+
+### Approach 1: Rule-Based Validation
+
+Use rules directly with FormInput for simple validation needs.
+
+**Location:** `src/validation/rules.ts`
+
+```typescript
+import { REGEX } from '@/constants/regex';
+import { MSG } from './messages';
+import { LIMITS } from '@/constants/limits';
+
+export const rules = {
+  name: (override?: { min?: number; max?: number }) => ({
+    required: MSG.required,
+    pattern: { value: REGEX.HAS_LETTER, message: MSG.hasLetter },
+    minLength: { value: LIMITS.NAME.min, message: MSG.min },
+    maxLength: { value: LIMITS.NAME.max, message: MSG.max },
+  }),
+
+  email: () => ({
+    required: MSG.required,
+    pattern: { value: REGEX.EMAIL, message: MSG.email },
+  }),
+
+  password: () => ({
+    required: MSG.required,
+    pattern: { value: REGEX.STRONG_PASSWORD, message: MSG.strongPassword },
+  }),
+};
+```
+
+**Usage with FormInput:**
+
+```tsx
+import FormInput from '@/components/shared/form-input/FormInput';
+import { rules } from '@/validation/rules';
+
+<FormInput
+  control={control}
+  name="email"
+  rules={rules.email()} // Rule-based validation
+  variant="text"
+  placeholder="Enter email"
+/>;
+```
+
+---
+
+### Approach 2: Schema-Based Validation (Recommended)
+
+Use Yup schemas with `yupResolver` for complex validation logic.
+
+**Location:** `src/validation/schema/`
+
+```typescript
+// filepath: src/validation/schema/auth.schema.ts
+import * as yup from 'yup';
+import { LIMITS } from '@/constants/limits';
+import { REGEX } from '@/constants/regex';
+import { MSG } from '../messages';
+
+export const loginSchema = yup.object({
+  email: yup
+    .string()
+    .trim()
+    .required(MSG.required)
+    .email(MSG.email)
+    .min(LIMITS.EMAIL.min, MSG.min)
+    .max(LIMITS.EMAIL.max, MSG.max)
+    .matches(REGEX.EMAIL, MSG.email),
+
+  password: yup
+    .string()
+    .trim()
+    .required(MSG.required)
+    .min(LIMITS.PASSWORD.min, MSG.min)
+    .max(LIMITS.PASSWORD.max, MSG.max)
+    .matches(REGEX.STRONG_PASSWORD, MSG.strongPassword),
+});
+```
+
+**Usage with React Hook Form:**
+
+```tsx
+import { useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { loginSchema } from '@/validation/schema/auth.schema';
+import { InferType } from 'yup';
+
+type LoginFormType = InferType<typeof loginSchema>;
+
+const LoginScreen = () => {
+  const { control, formState: { errors }, handleSubmit } = useForm<LoginFormType>({
+    resolver: yupResolver(loginSchema),  // Schema-based validation
+  });
+
+  return (/* ... */);
+};
+```
+
+---
+
+### i18n Validation Messages
+
+> ⚠️ **IMPORTANT:** `messages.ts` should contain ONLY translation keys, NOT actual messages. All real messages must be in `en.json` (or other locale files).
+
+**messages.ts - Contains only keys:**
+
+```typescript
+// filepath: src/validation/messages.ts
+export const MSG = {
+  required: 'validation.required', // Key, not message
+  min: 'validation.minLength',
+  max: 'validation.maxLength',
+  email: 'validation.invalidEmail',
+  strongPassword: 'validation.strongPassword',
+  // ...
+};
+```
+
+**en.json - Contains actual messages:**
+
+```json
+{
+  "validation": {
+    "required": "{{field}} is required",
+    "minLength": "{{field}} must be at least {{min}} characters",
+    "maxLength": "{{field}} must be at most {{max}} characters",
+    "invalidEmail": "Please enter a valid email address",
+    "strongPassword": "Password must include upper, lower, number & symbol"
+  }
+}
+```
+
+This approach enables full i18n support - simply add translation files for other languages.
+
+---
+
+### tValError - Validation Error Translation Helper
+
+Use `tValError` to translate validation errors with dynamic parameters.
+
+**Location:** `src/validation/tValError.ts`
+
+```typescript
+import { TFunction } from 'i18next';
+import { FieldError } from 'react-hook-form';
+
+type Params = {
+  min?: number;
+  max?: number;
+  field?: string;
+};
+
+export const tValError = (t: TFunction, err?: FieldError, params?: Params) => {
+  if (!err?.message) return undefined;
+  return t(err.message as any, { ...params });
+};
+```
+
+**Usage in FormInput:**
+
+```tsx
+import { useTranslation } from 'react-i18next';
+import { tValError } from '@/validation/tValError';
+import { LIMITS } from '@/constants/limits';
+
+const { t } = useTranslation();
+const {
+  control,
+  formState: { errors },
+} = useForm();
+
+<FormInput
+  control={control}
+  name="password"
+  variant="text"
+  label={t('auth.password')}
+  error={tValError(t, errors.password, {
+    field: t('auth.password'), // Maps to {{field}} in en.json
+    min: LIMITS.PASSWORD.min, // Maps to {{min}} in en.json
+    max: LIMITS.PASSWORD.max, // Maps to {{max}} in en.json
+  })}
+/>;
+```
+
+**Result:** If password is too short, shows: "Password must be at least 8 characters"
+
+---
+
+## 🧩 FormInput Component
+
+A comprehensive form input component that handles all input types and edge cases.
+
+**Location:** `src/components/shared/form-input/`
+
+### Available Variants
+
+| Variant    | File                      | Description                      |
+| ---------- | ------------------------- | -------------------------------- |
+| `text`     | `TextInputVariant.tsx`    | Standard text input              |
+| `dropdown` | `DropdownVariant.tsx`     | Dropdown selector                |
+| `datetime` | `DateTimeVariant.tsx`     | Date and time picker             |
+| `country`  | `CountryPhoneVariant.tsx` | Country code selector with phone |
+| `toggle`   | `ToggleVariant.tsx`       | Toggle switch                    |
+
+### Using FormInput with React Hook Form
+
+```tsx
+import FormInput from '@/components/shared/form-input/FormInput';
+import { useForm } from 'react-hook-form';
+
+const MyForm = () => {
+  const {
+    control,
+    formState: { errors },
+  } = useForm();
+
+  return (
+    <>
+      {/* Text Input */}
+      <FormInput
+        control={control}
+        name="email"
+        variant="text"
+        label="Email"
+        placeholder="Enter email"
+        error={tValError(t, errors.email, { field: 'Email' })}
+      />
+
+      {/* Password Input */}
+      <FormInput
+        control={control}
+        name="password"
+        variant="text"
+        isPassword
+        label="Password"
+        placeholder="Enter password"
+      />
+
+      {/* Dropdown */}
+      <FormInput
+        control={control}
+        name="country"
+        variant="dropdown"
+        label="Country"
+        placeholder="Select Country"
+        data={[
+          { label: 'USA', value: 'us' },
+          { label: 'Canada', value: 'ca' },
+        ]}
+      />
+
+      {/* Date Picker */}
+      <FormInput
+        control={control}
+        name="birthdate"
+        variant="datetime"
+        mode="date"
+        label="Date of Birth"
+      />
+
+      {/* Country Phone */}
+      <FormInput
+        control={control}
+        name="phone"
+        variant="country"
+        label="Phone Number"
+      />
+
+      {/* Toggle */}
+      <FormInput
+        control={control}
+        name="notifications"
+        variant="toggle"
+        label="Enable Notifications"
+      />
+    </>
+  );
+};
+```
+
+### Using Variants in Standalone Mode
+
+> ⚠️ **IMPORTANT:** When using a variant component directly (without FormInput wrapper), you **MUST** use `mode="standalone"`.
+
+```tsx
+import { TextInputVariant } from '@/components/shared/form-input/variants/TextInputVariant';
+
+// Standalone mode - without React Hook Form
+<TextInputVariant
+  mode="standalone"
+  value={myValue}
+  onChangeText={setMyValue}
+  placeholder="Enter text"
+/>;
+```
+
+---
+
+## 🎨 Theme System
+
+The app includes a complete theming system with Dark, Light, and System modes.
+
+**Location:** `src/context/ThemeContext.tsx`
+
+### Theme Files
+
+| File                      | Description                |
+| ------------------------- | -------------------------- |
+| `src/theme/light.ts`      | Light theme colors & icons |
+| `src/theme/dark.ts`       | Dark theme colors & icons  |
+| `src/theme/palette.ts`    | Color palette              |
+| `src/theme/fonts.ts`      | Font family definitions    |
+| `src/theme/typography.ts` | Typography styles          |
+| `src/theme/spacing.ts`    | Spacing constants          |
+| `src/theme/layout.ts`     | Layout utilities           |
+
+### Theme Modes
+
+- `'light'` - Force light theme
+- `'dark'` - Force dark theme
+- `'system'` - Follow device theme (default)
+
+### Using Theme in Components
+
+```tsx
+import { useAppTheme } from '@/context/ThemeContext';
+
+const MyComponent = () => {
+  const { color, icon, mode, setMode } = useAppTheme();
+
+  return (
+    <View style={{ backgroundColor: color.background_primary }}>
+      <Text style={{ color: color.text_primary }}>Hello World</Text>
+
+      {/* Theme-aware icon */}
+      <Icon name={icon.tooltip} size={24} />
+
+      {/* Change theme */}
+      <Button title="Dark Mode" onPress={() => setMode('dark')} />
+      <Button title="Light Mode" onPress={() => setMode('light')} />
+      <Button title="System" onPress={() => setMode('system')} />
+    </View>
+  );
+};
+```
+
+### Adding Theme-Specific Icons
+
+1. Add light/dark variants in `src/theme/light.ts` and `src/theme/dark.ts`:
+
+```typescript
+// light.ts
+export const light = {
+  color: {
+    /* ... */
+  },
+  icon: {
+    tooltip: 'tooltip_light' as IconName,
+    myIcon: 'myIcon_light' as IconName, // Add here
+  },
+};
+
+// dark.ts
+export const dark = {
+  color: {
+    /* ... */
+  },
+  icon: {
+    tooltip: 'tooltip_dark',
+    myIcon: 'myIcon_dark', // Add here
+  },
+};
+```
+
+2. Use in components:
+
+```tsx
+const { icon } = useAppTheme();
+<Icon name={icon.myIcon} />;
+```
+
+---
+
+## 🖼️ Icon System
+
+### General Icons (Non-Tab)
+
+**Location:** `src/assets/icons/`
+
+**Adding new icons:**
+
+1. Place your `.svg` file in `src/assets/icons/`
+2. Run the generation script:
    ```bash
-   cd ios
-   xed .
+   yarn generate:icons
+   # or
+   npm run generate:icons
    ```
-3. In Xcode, click on your project dropdown → Go to `YourProject/Images`
-4. Click on `AppIcon`
-5. Drag and drop images according to their pt size
-6. Set the 1024pt marketing image
-7. Uninstall the app and run again
+3. The script auto-generates `index.ts` with type-safe exports
+
+**Usage:**
+
+```tsx
+import Icon from '@/components/shared/Icon';
+
+<Icon name="home" size={24} color="#000" />;
+```
+
+### Light & Dark Theme Icons
+
+For icons with light/dark variants:
+
+1. Name them with a suffix convention (e.g., `myIcon_light.svg`, `myIcon_dark.svg`)
+2. Run `yarn generate:icons`
+3. Import icons into `light.ts` and `dark.ts` theme files
+4. Use with `useAppTheme`:
+
+```tsx
+const { icon } = useAppTheme();
+<Icon name={icon.myIcon} />;
+```
+
+---
+
+## 📑 Tab Bar Icon System
+
+> ⚠️ **IMPORTANT:** Do NOT use tab icons directly. Always use the render function approach.
+
+**Location:** `src/assets/icons/tabs/`
+
+### Tab Icon Folder Structure
+
+```
+src/assets/icons/tabs/
+├── home/
+│   ├── filled_light.svg
+│   ├── filled_dark.svg
+│   └── outline.svg
+├── profile/
+│   ├── filled_light.svg
+│   ├── filled_dark.svg
+│   └── outline.svg
+└── index.ts              # Tab icon mappings
+```
+
+### Adding a New Tab Icon
+
+1. Create a folder under `src/assets/icons/tabs/` with your tab name (e.g., `settings/`)
+
+2. Add the required SVG files following the naming pattern:
+
+   - `filled_light.svg` - Active state for light theme
+   - `filled_dark.svg` - Active state for dark theme
+   - `outline.svg` - Inactive state (both themes)
+
+3. Update `src/assets/icons/tabs/index.ts`:
+
+```typescript
+import SettingsFilledLight from './settings/filled_light.svg';
+import SettingsFilledDark from './settings/filled_dark.svg';
+import SettingsOutline from './settings/outline.svg';
+
+export const TabIcons = {
+  // ...existing icons
+  settings: {
+    active: {
+      light: SettingsFilledLight,
+      dark: SettingsFilledDark,
+    },
+    inactive: {
+      light: SettingsOutline,
+      dark: SettingsOutline,
+    },
+  },
+} as const;
+
+export type TabIconName = keyof typeof TabIcons;
+```
+
+4. Create a render function in `src/components/shared/navigation/tabIconRender.tsx`:
+
+```typescript
+import AnimatedTabIcon from './AnimatedTabIcon';
+
+interface RenderTabIconProps {
+  focused: boolean;
+  size: number;
+}
+
+export const renderHomeIcon = (props: RenderTabIconProps) => (
+  <AnimatedTabIcon {...props} name="home" />
+);
+
+export const renderProfileIcon = (props: RenderTabIconProps) => (
+  <AnimatedTabIcon {...props} name="profile" />
+);
+
+// Add your new tab icon render function
+export const renderSettingsIcon = (props: RenderTabIconProps) => (
+  <AnimatedTabIcon {...props} name="settings" />
+);
+```
+
+5. Use in your tab navigator (`app.tab.tsx`):
+
+```tsx
+import { renderSettingsIcon } from '@/components/shared/navigation/tabIconRender';
+
+<Tabs.Screen
+  name="Settings"
+  component={Settings}
+  options={{
+    tabBarIcon: renderSettingsIcon, // Use the render function
+  }}
+/>;
+```
+
+---
+
+## 🧭 Navigation Components
+
+All navigation-related shared components are in `src/components/shared/navigation/`:
+
+| Component                | Description                              |
+| ------------------------ | ---------------------------------------- |
+| `AnimatedTabIcon.tsx`    | Animated tab bar icon with theme support |
+| `HeaderBackButton.tsx`   | Custom back button for headers           |
+| `HeaderActionButton.tsx` | Action button for headers                |
+| `tabIconRender.tsx`      | Tab icon render functions                |
+
+### Screen Background Styling
+
+Background colors are automatically applied via `contentStyle` in:
+
+- `src/app/navigation/stacks/app.stack.tsx`
+- `src/app/navigation/stacks/auth.stack.tsx`
+
+```tsx
+contentStyle: [
+  { backgroundColor: color.background_primary },
+  layout.flex,
+],
+```
+
+**Alternative approaches:**
+
+1. Remove this logic and apply background per screen
+2. Use `sceneStyle` (as done in `app.tab.tsx`) for bottom tabs
+
+---
+
+## 📝 Global Types
+
+All global/shared TypeScript types are in `src/types/`:
+
+| File                  | Description                           |
+| --------------------- | ------------------------------------- |
+| `api.types.ts`        | API request/response types            |
+| `navigation.types.ts` | Navigation param lists & screen props |
+| `index.ts`            | Re-exports all types                  |
+
+**Usage:**
+
+```tsx
+import {
+  AuthStackScreenProps,
+  AppStackParamList,
+} from '@/types/navigation.types';
+import { ApiResponse } from '@/types/api.types';
+```
 
 ---
 
@@ -254,73 +993,27 @@ This will auto-generate an `index.ts` file with typed icon exports. See [scripts
 
 A versatile button component with multiple variants, loading states, haptic feedback, and icon support.
 
-**Location:** [src/components/shared/CustomButton.tsx](file:///Users/sstpc/Desktop/Satyam/Others/rnStarter/src/components/shared/CustomButton.tsx)
+**Location:** `src/components/shared/CustomButton.tsx`
 
 **Usage:**
 
 ```tsx
 import CustomButton from '@/components/shared/CustomButton';
 
-// Basic usage
-<CustomButton
-  title="Click Me"
-  onPress={() => console.log('Pressed')}
-/>
+// Basic
+<CustomButton title="Click Me" onPress={() => {}} />
 
-// With variants
-<CustomButton
-  title="Primary Button"
-  variant="primary"
-/>
-
-<CustomButton
-  title="Outline Button"
-  variant="outline"
-/>
-
-<CustomButton
-  title="Danger Button"
-  variant="danger"
-/>
-
-<CustomButton
-  title="Ghost Button"
-  variant="ghost"
-/>
+// Variants
+<CustomButton title="Primary" variant="primary" />
+<CustomButton title="Outline" variant="outline" />
+<CustomButton title="Danger" variant="danger" />
+<CustomButton title="Ghost" variant="ghost" />
 
 // With loading state
-<CustomButton
-  title="Submit"
-  loading={isLoading}
-  onPress={handleSubmit}
-/>
+<CustomButton title="Submit" loading={isLoading} onPress={handleSubmit} />
 
-// With icons
-<CustomButton
-  title="Next"
-  rightIcon={<Icon name="arrow-right" />}
-/>
-
-// Full width
-<CustomButton
-  title="Continue"
-  fullWidth
-/>
-
-// Custom styling
-<CustomButton
-  title="Custom"
-  backgroundColor="#FF6B6B"
-  borderRadius={24}
-  containerStyle={{ marginTop: 20 }}
-  textStyle={{ fontSize: 18 }}
-/>
-
-// With haptic feedback
-<CustomButton
-  title="Heavy Haptic"
-  haptic="heavy"
-/>
+// Full width with haptic feedback
+<CustomButton title="Continue" fullWidth haptic="heavy" />
 ```
 
 **Props:**
@@ -342,165 +1035,63 @@ import CustomButton from '@/components/shared/CustomButton';
 | `containerStyle`  | `StyleProp<ViewStyle>`                                | -           | Custom container styles |
 | `textStyle`       | `StyleProp<TextStyle>`                                | -           | Custom text styles      |
 
----
-
 ### CustomText
 
-A text component that respects the app's typography system and theme.
+Text component respecting the app's typography system and theme.
 
-**Location:** [src/components/shared/CustomText.tsx](file:///Users/sstpc/Desktop/Satyam/Others/rnStarter/src/components/shared/CustomText.tsx)
-
-**Usage:**
+**Location:** `src/components/shared/CustomText.tsx`
 
 ```tsx
 import CustomText from '@/components/shared/CustomText';
 
-<CustomText variant="h1" weight="bold">
-  Heading 1
-</CustomText>
-
-<CustomText variant="body" weight="400">
-  Body text
-</CustomText>
-
-<CustomText variant="button" weight="500">
-  Button Text
-</CustomText>
+<CustomText variant="h1" weight="bold">Heading</CustomText>
+<CustomText variant="body" weight="400">Body text</CustomText>
 ```
-
----
 
 ### AppImage
 
-Optimized image component using `react-native-fast-image` for better performance and caching.
+Optimized image component using `react-native-fast-image`.
 
-**Location:** [src/components/shared/AppImage.tsx](file:///Users/sstpc/Desktop/Satyam/Others/rnStarter/src/components/shared/AppImage.tsx)
-
-**Usage:**
+**Location:** `src/components/shared/AppImage.tsx`
 
 ```tsx
 import AppImage from '@/components/shared/AppImage';
 
-// Remote image
 <AppImage
   source={{ uri: 'https://example.com/image.jpg' }}
   style={{ width: 200, height: 200 }}
-/>
-
-// Local image
-<AppImage
-  source={require('@/assets/images/logo.png')}
-  style={{ width: 100, height: 100 }}
-/>
+/>;
 ```
-
----
 
 ### Icon
 
 SVG icon component with type-safe icon names.
 
-**Location:** [src/components/shared/Icon.tsx](file:///Users/sstpc/Desktop/Satyam/Others/rnStarter/src/components/shared/Icon.tsx)
-
-**Usage:**
+**Location:** `src/components/shared/Icon.tsx`
 
 ```tsx
 import Icon from '@/components/shared/Icon';
 
-<Icon name="home" width={24} height={24} color="#000" />;
+<Icon name="home" size={24} color="#000" />;
 ```
-
----
-
-### FormInput
-
-Comprehensive form input component with multiple variants (text, dropdown, date/time, country code, toggle).
-
-**Location:** [src/components/shared/form-input/](file:///Users/sstpc/Desktop/Satyam/Others/rnStarter/src/components/shared/form-input/)
-
-**Variants:**
-
-1. **TextInputVariant** - Standard text input
-2. **DropdownVariant** - Dropdown selector
-3. **DateTimeVariant** - Date and time picker
-4. **CountryCodeVariant** - Country code selector
-5. **ToggleVariant** - Toggle switch
-
-**Usage with React Hook Form:**
-
-```tsx
-import { FormInput } from '@/components/shared/form-input';
-import { useForm } from 'react-hook-form';
-
-const MyForm = () => {
-  const { control } = useForm();
-
-  return (
-    <>
-      {/* Text Input */}
-      <FormInput
-        name="email"
-        control={control}
-        variant="text"
-        placeholder="Enter email"
-        rules={{ required: 'Email is required' }}
-      />
-
-      {/* Dropdown */}
-      <FormInput
-        name="country"
-        control={control}
-        variant="dropdown"
-        placeholder="Select Country"
-        data={[
-          { label: 'USA', value: 'us' },
-          { label: 'Canada', value: 'ca' },
-        ]}
-      />
-
-      {/* Date Picker */}
-      <FormInput
-        name="birthdate"
-        control={control}
-        variant="datetime"
-        mode="date"
-      />
-
-      {/* Country Code */}
-      <FormInput name="country_code" control={control} variant="country" />
-
-      {/* Toggle */}
-      <FormInput name="notifications" control={control} variant="toggle" />
-    </>
-  );
-};
-```
-
----
 
 ### Modal
 
 Custom modal component for dialogs and overlays.
 
-**Location:** [src/components/shared/modal/](file:///Users/sstpc/Desktop/Satyam/Others/rnStarter/src/components/shared/modal/)
-
----
+**Location:** `src/components/shared/modal/`
 
 ### BottomSheet
 
 Bottom sheet component for slides-up content.
 
-**Location:** [src/components/shared/bottom-sheet/](file:///Users/sstpc/Desktop/Satyam/Others/rnStarter/src/components/shared/bottom-sheet/)
-
----
+**Location:** `src/components/shared/bottom-sheet/`
 
 ### Loader
 
 Loading indicator component.
 
-**Location:** [src/components/shared/loader/](file:///Users/sstpc/Desktop/Satyam/Others/rnStarter/src/components/shared/loader/)
-
----
+**Location:** `src/components/shared/loader/`
 
 ### Network Components
 
@@ -512,128 +1103,9 @@ Components for handling network connectivity:
 
 **Locations:**
 
-- [src/components/shared/network-provider/](file:///Users/sstpc/Desktop/Satyam/Others/rnStarter/src/components/shared/network-provider/)
-- [src/components/shared/network-aware-view/](file:///Users/sstpc/Desktop/Satyam/Others/rnStarter/src/components/shared/network-aware-view/)
-- [src/components/shared/no-internet/](file:///Users/sstpc/Desktop/Satyam/Others/rnStarter/src/components/shared/no-internet/)
-
----
-
-## 🎣 Custom Hooks
-
-### useDebounce
-
-Debounce a value with a delay.
-
-**Location:** [src/hooks/useDebounce.ts](file:///Users/sstpc/Desktop/Satyam/Others/rnStarter/src/hooks/useDebounce.ts)
-
-**Usage:**
-
-```tsx
-import { useDebounce } from '@/hooks';
-
-const MyComponent = () => {
-  const [searchTerm, setSearchTerm] = useState('');
-  const debouncedSearch = useDebounce(searchTerm, 500);
-
-  useEffect(() => {
-    // API call with debounced value
-    fetchResults(debouncedSearch);
-  }, [debouncedSearch]);
-
-  return <TextInput value={searchTerm} onChangeText={setSearchTerm} />;
-};
-```
-
----
-
-### useThrottle
-
-Throttle a value to limit updates.
-
-**Location:** [src/hooks/useThrottle.ts](file:///Users/sstpc/Desktop/Satyam/Others/rnStarter/src/hooks/useThrottle.ts)
-
-**Usage:**
-
-```tsx
-import { useThrottle } from '@/hooks';
-
-const throttledValue = useThrottle(value, 1000);
-```
-
----
-
-### useLoading
-
-Manage loading state for async operations.
-
-**Location:** [src/hooks/useLoading.ts](file:///Users/sstpc/Desktop/Satyam/Others/rnStarter/src/hooks/useLoading.ts)
-
-**Usage:**
-
-```tsx
-import { useLoading } from '@/hooks';
-
-const MyComponent = () => {
-  const { isLoading, startLoading, stopLoading } = useLoading();
-
-  const handleSubmit = async () => {
-    startLoading();
-    try {
-      await api.submit();
-    } finally {
-      stopLoading();
-    }
-  };
-
-  return (
-    <CustomButton title="Submit" loading={isLoading} onPress={handleSubmit} />
-  );
-};
-```
-
----
-
-### useForm
-
-Custom form hook integration.
-
-**Location:** [src/hooks/useForm.ts](file:///Users/sstpc/Desktop/Satyam/Others/rnStarter/src/hooks/useForm.ts)
-
----
-
-## 🎨 Theming
-
-The app includes a complete theming system with dark and light modes.
-
-**Files:**
-
-- [src/theme/dark.ts](file:///Users/sstpc/Desktop/Satyam/Others/rnStarter/src/theme/dark.ts) - Dark theme colors
-- [src/theme/light.ts](file:///Users/sstpc/Desktop/Satyam/Others/rnStarter/src/theme/light.ts) - Light theme colors
-- [src/theme/fonts.ts](file:///Users/sstpc/Desktop/Satyam/Others/rnStarter/src/theme/fonts.ts) - Font configuration
-- [src/theme/typography.ts](file:///Users/sstpc/Desktop/Satyam/Others/rnStarter/src/theme/typography.ts) - Typography styles
-- [src/theme/spacing.ts](file:///Users/sstpc/Desktop/Satyam/Others/rnStarter/src/theme/spacing.ts) - Spacing constants
-- [src/theme/layout.ts](file:///Users/sstpc/Desktop/Satyam/Others/rnStarter/src/theme/layout.ts) - Layout utilities
-- [src/theme/palette.ts](file:///Users/sstpc/Desktop/Satyam/Others/rnStarter/src/theme/palette.ts) - Color palette
-
-**Usage:**
-
-```tsx
-import { useAppTheme } from '@/context/ThemeContext';
-
-const MyComponent = () => {
-  const { color, toggleTheme, isDarkMode } = useAppTheme();
-
-  return (
-    <View style={{ backgroundColor: color.background_primary }}>
-      <CustomText style={{ color: color.text }}>Hello World</CustomText>
-      <CustomButton
-        title={`Switch to ${isDarkMode ? 'Light' : 'Dark'} Mode`}
-        onPress={toggleTheme}
-      />
-    </View>
-  );
-};
-```
+- `src/components/shared/network-provider/`
+- `src/components/shared/network-aware-view/`
+- `src/components/shared/no-internet/`
 
 ---
 
@@ -641,7 +1113,7 @@ const MyComponent = () => {
 
 Multi-language support using `react-i18next`.
 
-**Location:** [src/i18n/](file:///Users/sstpc/Desktop/Satyam/Others/rnStarter/src/i18n/)
+**Location:** `src/i18n/`
 
 **Usage:**
 
@@ -663,87 +1135,7 @@ const MyComponent = () => {
 };
 ```
 
-**Add translations:** Add your translation files in `src/i18n/locales/`
-
----
-
-## 🔐 Authentication
-
-Pre-built authentication flow with login, signup, and auth state management.
-
-**Store:** [src/store/auth.store.ts](file:///Users/sstpc/Desktop/Satyam/Others/rnStarter/src/store/auth.store.ts)
-
-**Screens:** [src/screens/auth/](file:///Users/sstpc/Desktop/Satyam/Others/rnStarter/src/screens/auth/)
-
-**API:** [src/services/auth.api.ts](file:///Users/sstpc/Desktop/Satyam/Others/rnStarter/src/services/auth.api.ts)
-
----
-
-## 🌐 Network Monitoring
-
-Built-in network state monitoring with store and components.
-
-**Store:** [src/store/network.store.ts](file:///Users/sstpc/Desktop/Satyam/Others/rnStarter/src/store/network.store.ts)
-
-**Usage:**
-
-```tsx
-import { useNetworkStore } from '@/store';
-
-const MyComponent = () => {
-  const { isConnected } = useNetworkStore();
-
-  return <CustomText>{isConnected ? 'Online' : 'Offline'}</CustomText>;
-};
-```
-
----
-
-## 📱 Running the App
-
-### Android
-
-```bash
-yarn android
-# or
-npm run android
-```
-
-### iOS
-
-```bash
-yarn ios
-# or
-npm run ios
-```
-
-### Start Metro
-
-```bash
-yarn start
-# or
-npm start
-```
-
-### Reset Cache
-
-```bash
-npx react-native start --reset-cache
-```
-
----
-
-## 📦 Key Dependencies
-
-- **react-navigation** - Navigation
-- **react-hook-form** - Form handling
-- **i18next** - Internationalization
-- **react-native-svg** - SVG support
-- **react-native-fast-image** - Optimized image loading
-- **@mhpdev/react-native-haptics** - Haptic feedback
-- **react-native-element-dropdown** - Dropdown component
-- **react-native-country-select** - Country selector
-- **@react-native-community/datetimepicker** - Date/Time picker
+**Add translations:** Add files in `src/i18n/locales/` (e.g., `es.json`, `fr.json`)
 
 ---
 
@@ -753,9 +1145,7 @@ npx react-native start --reset-cache
 
 Responsive size normalization for consistent UI across devices.
 
-**Location:** [src/utils/normalize.ts](file:///Users/sstpc/Desktop/Satyam/Others/rnStarter/src/utils/normalize.ts)
-
-**Usage:**
+**Location:** `src/utils/normalize.ts`
 
 ```tsx
 import { normalize } from '@/utils/normalize';
@@ -774,10 +1164,48 @@ const styles = StyleSheet.create({
 
 Pre-defined constants for app-wide use:
 
-- **[src/constants/device.ts](file:///Users/sstpc/Desktop/Satyam/Others/rnStarter/src/constants/device.ts)** - Device dimensions and utilities
-- **[src/constants/limits.ts](file:///Users/sstpc/Desktop/Satyam/Others/rnStarter/src/constants/limits.ts)** - Input limits and constraints
-- **[src/constants/regex.ts](file:///Users/sstpc/Desktop/Satyam/Others/rnStarter/src/constants/regex.ts)** - Common regex patterns
-- **[src/constants/routes.ts](file:///Users/sstpc/Desktop/Satyam/Others/rnStarter/src/constants/routes.ts)** - Navigation route names
+| File                      | Description                     |
+| ------------------------- | ------------------------------- |
+| `src/constants/device.ts` | Device dimensions and utilities |
+| `src/constants/limits.ts` | Input limits and constraints    |
+| `src/constants/regex.ts`  | Common regex patterns           |
+
+---
+
+## 📱 Running the App
+
+```bash
+# Android
+yarn android
+
+# iOS
+yarn ios
+
+# Start Metro
+yarn start
+
+# Reset cache
+npx react-native start --reset-cache
+```
+
+---
+
+## 📦 Key Dependencies
+
+| Package                        | Purpose                   |
+| ------------------------------ | ------------------------- |
+| `@reduxjs/toolkit`             | State management          |
+| `redux-persist`                | State persistence         |
+| `react-native-mmkv`            | Fast key-value storage    |
+| `react-hook-form`              | Form handling             |
+| `@hookform/resolvers`          | Form validation resolvers |
+| `yup`                          | Schema validation         |
+| `react-navigation`             | Navigation                |
+| `i18next`                      | Internationalization      |
+| `react-native-svg`             | SVG support               |
+| `react-native-fast-image`      | Optimized image loading   |
+| `@mhpdev/react-native-haptics` | Haptic feedback           |
+| `react-native-reanimated`      | Animations                |
 
 ---
 
@@ -787,31 +1215,23 @@ Pre-defined constants for app-wide use:
 
    ```tsx
    // ✅ Good
-   import { CustomButton } from '@/components/shared/CustomButton';
+   import CustomButton from '@/components/shared/CustomButton';
 
    // ❌ Avoid
-   import { CustomButton } from '../../../components/shared/CustomButton';
+   import CustomButton from '../../../components/shared/CustomButton';
    ```
 
-2. **Follow the component structure** - Keep components in `src/components/shared/`
+2. **Use type-safe Redux hooks** - Always use `useAppDispatch` and `useAppSelector`
 
-3. **Use the theme system** - Always reference colors from the theme context
+3. **Follow validation patterns** - Use schema-based validation for complex forms
 
-4. **Leverage custom hooks** - Use provided hooks for common patterns
+4. **Use tValError for errors** - Ensures proper i18n support
 
-5. **Type everything** - The project uses strict TypeScript mode
+5. **Tab icons via render functions** - Never use tab icons directly
 
----
+6. **Theme-aware components** - Always use `useAppTheme` for colors and icons
 
-## 🤝 Contributing
-
-This is a starter kit designed to be customized for your needs. Feel free to:
-
-- Add more components
-- Customize the theme
-- Add new features
-- Modify navigation structure
-- Extend the store and services
+7. **Global types in src/types/** - Single source of truth for TypeScript types
 
 ---
 
@@ -821,17 +1241,4 @@ This project is a starter template and can be used freely for your projects.
 
 ---
 
-## 🎉 Getting Started with Development
-
-1. Clone this repository
-2. Follow the setup instructions above
-3. Start building your app with pre-configured features!
-4. Customize components and theme to match your brand
-5. Add your API endpoints in `src/services/`
-6. Build your screens and connect them to navigation
-
----
-
 **Happy Coding! 🚀**
-
-For questions or issues, please refer to the individual component files linked throughout this README.
