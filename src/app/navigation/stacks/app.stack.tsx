@@ -3,7 +3,7 @@ import MainTabs from '@/screens/app/main-tab';
 import ProfileSetup from '@/screens/app/profile-setup';
 import { FontFamily } from '@/theme';
 import { layout } from '@/theme/layout';
-import { AppStackParamList } from '@/types/navigation.types';
+import { AppStackParamList } from '@/types';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import AppBottomTabs from './app.tab';
 import { useAppSelector } from '@/hooks/useAppSelector';

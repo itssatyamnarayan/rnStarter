@@ -6,7 +6,7 @@ import { useAppTheme } from '@/context/ThemeContext';
 import { Home, Profile } from '@/screens/tab';
 import { FontFamily } from '@/theme';
 import { layout } from '@/theme/layout';
-import { BottomTabParamList } from '@/types/navigation.types';
+import { BottomTabParamList } from '@/types';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
 const Tabs = createBottomTabNavigator<BottomTabParamList>();

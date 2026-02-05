@@ -1,6 +1,6 @@
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
-import { navigationRef } from '@/types/navigation.types';
+import { navigationRef } from '@/types';
 import { useAppSelector } from '@/hooks/useAppSelector';
 import { selectIsAuthenticated } from '@/redux/selectors/auth.selectors';
 import AppStack from './stacks/app.stack';

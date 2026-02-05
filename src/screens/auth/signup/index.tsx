@@ -2,7 +2,7 @@ import CustomButton from '@/components/shared/CustomButton';
 import CustomText from '@/components/shared/CustomText';
 import FormInput from '@/components/shared/form-input/FormInput';
 import { useAppTheme } from '@/context/ThemeContext';
-import { AuthStackScreenProps } from '@/types/navigation.types';
+import { AuthStackScreenProps } from '@/types';
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';

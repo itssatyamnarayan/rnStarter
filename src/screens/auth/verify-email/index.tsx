@@ -1,4 +1,4 @@
-import { AuthStackScreenProps } from '@/types/navigation.types';
+import { AuthStackScreenProps } from '@/types';
 import React from 'react';
 import { View, Text } from 'react-native';
 

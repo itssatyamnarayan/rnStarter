@@ -20,7 +20,8 @@
     "search": "Search",
     "noResults": "No results found",
     "emptyState": "Nothing here yet",
-    "continue": "Continue"
+    "continue": "Continue",
+    "info": "Info"
   },
   "auth": {
     "login": "Login",

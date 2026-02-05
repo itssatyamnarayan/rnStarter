@@ -4,7 +4,7 @@ import { LIMITS } from '@/constants/limits';
 import { useAppDispatch } from '@/hooks/useAppDispatch';
 import { setUserAction } from '@/redux/slice/user.slice';
 import { layout } from '@/theme/layout';
-import { AppStackScreenProps } from '@/types/navigation.types';
+import { AppStackScreenProps } from '@/types';
 import { profileSetupSchema } from '@/validation/schema/user.schema';
 import { tValError } from '@/validation/tValError';
 import { yupResolver } from '@hookform/resolvers/yup';

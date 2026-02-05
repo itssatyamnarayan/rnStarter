@@ -1,6 +1,6 @@
 import CustomButton from '@/components/shared/CustomButton';
 import FormInput from '@/components/shared/form-input/FormInput';
-import { AuthStackScreenProps } from '@/types/navigation.types';
+import { AuthStackScreenProps } from '@/types';
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';

@@ -1,10 +1,10 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { AuthStackParamList } from '@/types/navigation.types';
 import { ForgotPassword, Login, Signup } from '@/screens/auth';
 import HeaderBackButton from '@/components/shared/navigation/HeaderBackButton';
 import { FontFamily } from '@/theme';
 import { useAppTheme } from '@/context/ThemeContext';
 import { layout } from '@/theme/layout';
+import { AuthStackParamList } from '@/types';
 
 const Stack = createNativeStackNavigator<AuthStackParamList>();
 

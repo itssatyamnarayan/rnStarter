@@ -1,8 +1,9 @@
 import axios from 'axios';
-import { FIREBASE_ERROR_MAP } from './firebaseErrorMap';
 import i18n from '@/i18n';
+import { FIREBASE_ERROR_MAP } from './firebaseErrorMap';
 import { BACKEND_ERROR_MAP } from './backendErrorCodes';
 import { HTTP_STATUS_MAP } from './httpStatusMap';
+import { ErrorToast } from '../toast';
 
 export type BackendErrorResponse = {
   code?: string;
@@ -78,4 +79,16 @@ export function getErrorMessage(error: any): string {
 
   /* 5️⃣ Final fallback */
   return i18n.t('errors.generic');
+}
+
+export function ErrorHandler(error: unknown) {
+  if (__DEV__) {
+    console.log('[ErrorHandler]', error);
+  }
+
+  const message = getErrorMessage(error);
+
+  ErrorToast({
+    message,
+  });
 }

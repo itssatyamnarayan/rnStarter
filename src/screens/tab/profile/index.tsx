@@ -1,7 +1,7 @@
 import CustomButton from '@/components/shared/CustomButton';
 import CustomText from '@/components/shared/CustomText';
 import { layout } from '@/theme/layout';
-import { TabScreenProps } from '@/types/navigation.types';
+import { TabScreenProps } from '@/types';
 import React from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 

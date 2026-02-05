@@ -4,7 +4,7 @@ import { RootNavigator } from './navigation/root';
 import '@/i18n';
 import Toast from 'react-native-toast-message';
 import { useAppTheme } from '@/context/ThemeContext';
-import { toastConfig } from '@/components/ui/toast/ToastConfig';
+import { toastConfig } from '@/services/toast';
 
 const App = () => {
   const { theme } = useAppTheme();

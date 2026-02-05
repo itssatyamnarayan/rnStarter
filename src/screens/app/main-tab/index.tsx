@@ -4,7 +4,7 @@ import { useAppDispatch } from '@/hooks/useAppDispatch';
 import { logoutAction } from '@/redux/slice/auth.slice';
 import { persistor } from '@/store';
 import { layout } from '@/theme/layout';
-import { AppStackScreenProps } from '@/types/navigation.types';
+import { AppStackScreenProps } from '@/types';
 import React from 'react';
 import { View } from 'react-native';
 
