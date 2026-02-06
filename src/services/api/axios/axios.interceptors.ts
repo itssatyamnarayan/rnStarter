@@ -1,7 +1,6 @@
 import { store } from '@/store';
 import { apiClient } from './axios.instance';
 import { logoutAction } from '@/redux/slice/auth.slice';
-import { ErrorHandler } from '@/services/errors';
 
 /* ================= REQUEST ================= */
 
@@ -31,7 +30,6 @@ apiClient.interceptors.response.use(
       return Promise.reject(error);
     }
 
-    ErrorHandler(error);
     return Promise.reject(error);
   },
 );
