@@ -6,13 +6,13 @@ import {
   View,
   ActivityIndicator,
   StyleSheet,
-  Platform,
   TextStyle,
   ViewStyle,
   StyleProp,
 } from 'react-native';
 import CustomText from './CustomText';
 import { normalize } from '@/utils/normalize';
+import { isIOS } from '@/constants/device';
 
 /* ───────────────── Types ───────────────── */
 
@@ -130,7 +130,7 @@ const CustomButton = ({
         variantButtonStyle[variant],
         fullWidth && buttonStyles.fullWidth,
         disabled && buttonStyles.disabled,
-        pressed && Platform.OS === 'ios' && { opacity: 0.7 },
+        pressed && isIOS && { opacity: 0.7 },
         { alignSelf },
         backgroundColor && { backgroundColor },
         { borderRadius },

@@ -1,4 +1,5 @@
 import CustomText from '@/components/shared/CustomText';
+import ImagePicker from '@/components/shared/ImagePicker';
 import { layout } from '@/theme/layout';
 import { TabScreenProps } from '@/types';
 import React from 'react';
@@ -16,6 +17,15 @@ const Home = ({}: props) => {
       >
         Home Screen
       </CustomText>
+      <ImagePicker
+        editable
+        width={150}
+        height={150}
+        editIconSize={39}
+        source="gallery"
+        onCancel={() => console.log('Image selection cancelled')}
+        onImageChange={image => console.log('Selected image:', image)}
+      />
     </SafeAreaView>
   );
 };
