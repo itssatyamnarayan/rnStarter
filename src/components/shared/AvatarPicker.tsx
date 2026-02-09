@@ -14,14 +14,10 @@ import Icon from './Icon';
 import { useAppTheme } from '@/context/ThemeContext';
 import { isIOS } from '@/constants/device';
 import { pickImage } from '@/utils/imagePickerHandler';
+import { useImagePicker } from '@/hooks/useImagePicker';
 
 type SourceType = 'gallery' | 'camera' | 'both';
 
-interface ImageResult {
-  uri: string;
-  width: number;
-  height: number;
-}
 
 interface Props {
   imageUrl?: string;
@@ -36,11 +32,11 @@ interface Props {
   source?: SourceType;
   maxSize?: number;
   quality?: number;
-  onImageChange?: (image: ImageResult) => void;
+  onImageChange?: (image: string) => void;
   onCancel?: () => void;
 }
 
-const ImagePicker: React.FC<Props> = ({
+const AvatarPicker: React.FC<Props> = ({
   imageUrl,
   defaultImage = GlobalImage.profilePlaceholder,
   width = 100,
@@ -53,19 +49,31 @@ const ImagePicker: React.FC<Props> = ({
   maxSize = 256,
   quality = 80,
   onImageChange,
-  onCancel,
 }) => {
   const { color } = useAppTheme();
+  const {captureFromCamera,images,pickFromBoth,pickFromGallery}=useImagePicker({maxSize,quality});
   const [localImageUri, setLocalImageUri] = useState<string | undefined>(
     imageUrl,
   );
-  const isImagePickerOpen = useRef<boolean>(false);
-
-  // Determine image source
   const imageSource =
-    localImageUri && typeof localImageUri === 'string'
+    localImageUri 
       ? { uri: localImageUri }
       : defaultImage;
+
+useEffect(() => {
+  if (images?.length > 0) {
+    const image = images[0];
+
+    setLocalImageUri(image.uri);
+    onImageChange?.(image.uri);
+  }
+}, [images, onImageChange]);
+
+
+useEffect(() => {
+  setLocalImageUri(imageUrl);
+}, [imageUrl]);
+
 
   const dynamicContainerStyle: ViewStyle = {
     width,
@@ -75,86 +83,80 @@ const ImagePicker: React.FC<Props> = ({
   };
 
   // Handle image picking from a specific source
-  const handlePickFromSource = useCallback(
-    async (pickSource: 'gallery' | 'camera') => {
-      try {
-        const result = await pickImage({
-          source: pickSource,
-          multiple: false,
-          maxSize,
-          quality,
-        });
+  // const handlePickFromSource = useCallback(
+  //   async (pickSource: 'gallery' | 'camera') => {
+  //     try {
+  //       const result = await pickImage({
+  //         source: pickSource,
+  //         multiple: false,
+  //         maxSize,
+  //         quality,
+  //       });
 
-        if (result.cancelled) {
-          onCancel?.();
-          return;
-        }
+  //       if (result.cancelled) {
+  //         onCancel?.();
+  //         return;
+  //       }
 
-        if (result.images.length > 0) {
-          const imageResult = result.images[0];
-          setLocalImageUri(imageResult.uri);
-          onImageChange?.(imageResult);
-        }
-      } catch (error) {
-        console.error('Error picking image:', error);
-      } finally {
-        isImagePickerOpen.current = false;
-      }
-    },
-    [maxSize, quality, onImageChange, onCancel],
-  );
+  //       if (result.images.length > 0) {
+  //         const imageResult = result.images[0];
+  //         setLocalImageUri(imageResult.uri);
+  //         onImageChange?.(imageResult);
+  //       }
+  //     } catch (error) {
+  //       console.error('Error picking image:', error);
+  //     } finally {
+  //       isImagePickerOpen.current = false;
+  //     }
+  //   },
+  //   [maxSize, quality, onImageChange, onCancel],
+  // );
 
   // Show action sheet for 'both' source type
-  const showSourceActionSheet = useCallback(() => {
-    if (Platform.OS === 'ios') {
-      ActionSheetIOS.showActionSheetWithOptions(
-        {
-          options: ['Cancel', 'Take Photo', 'Choose from Library'],
-          cancelButtonIndex: 0,
-        },
-        buttonIndex => {
-          if (buttonIndex === 1) {
-            handlePickFromSource('camera');
-          } else if (buttonIndex === 2) {
-            handlePickFromSource('gallery');
-          }
-        },
-      );
-    } else {
-      // Android Alert
-      Alert.alert(
-        'Select Image',
-        'Choose an option',
-        [
-          { text: 'Cancel', style: 'cancel' },
-          { text: 'Take Photo', onPress: () => handlePickFromSource('camera') },
-          {
-            text: 'Choose from Library',
-            onPress: () => handlePickFromSource('gallery'),
-          },
-        ],
-        { cancelable: true }, // We need add in Cancel isImagePickerOpen.current = false;
-      );
-    }
-  }, [handlePickFromSource]);
+  // const showSourceActionSheet = useCallback(() => {
+  //   if (Platform.OS === 'ios') {
+  //     ActionSheetIOS.showActionSheetWithOptions(
+  //       {
+  //         options: ['Cancel', 'Take Photo', 'Choose from Library'],
+  //         cancelButtonIndex: 0,
+  //       },
+  //       buttonIndex => {
+  //         if (buttonIndex === 1) {
+  //           handlePickFromSource('camera');
+  //         } else if (buttonIndex === 2) {
+  //           handlePickFromSource('gallery');
+  //         }
+  //       },
+  //     );
+  //   } else {
+  //     // Android Alert
+  //     Alert.alert(
+  //       'Select Image',
+  //       'Choose an option',
+  //       [
+  //         { text: 'Cancel', style: 'cancel' },
+  //         { text: 'Take Photo', onPress: () => handlePickFromSource('camera') },
+  //         {
+  //           text: 'Choose from Library',
+  //           onPress: () => handlePickFromSource('gallery'),
+  //         },
+  //       ],
+  //       { cancelable: true }, // We need add in Cancel isImagePickerOpen.current = false;
+  //     );
+  //   }
+  // }, [handlePickFromSource]);
 
   // Main press handler
   const handleEditPress = useCallback(() => {
-    if (isImagePickerOpen?.current) {
-      return;
-    }
-    isImagePickerOpen.current = true;
     if (source === 'both') {
-      showSourceActionSheet();
-    } else {
-      handlePickFromSource(source);
+      pickFromBoth();
+    } else if (source==='camera'){
+      captureFromCamera();
+    }else{
+      pickFromGallery()
     }
-  }, [source, showSourceActionSheet, handlePickFromSource]);
+  }, [source, pickFromBoth,captureFromCamera,pickFromGallery]);
 
-  // Update local state when imageUrl prop changes
-  useEffect(() => {
-    setLocalImageUri(imageUrl);
-  }, [imageUrl]);
 
   return (
     <View style={[styles.container, dynamicContainerStyle, containerStyle]}>
@@ -193,7 +195,7 @@ const ImagePicker: React.FC<Props> = ({
   );
 };
 
-export default ImagePicker;
+export default AvatarPicker;
 
 const styles = StyleSheet.create({
   container: {
