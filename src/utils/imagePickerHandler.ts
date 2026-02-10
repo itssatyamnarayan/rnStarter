@@ -105,7 +105,7 @@ export const pickImage = async (
     const pickerOptions: CameraOptions & ImageLibraryOptions = {
       mediaType: 'photo',
       includeBase64: false,
-      quality: 1,
+      quality: 1, // Get full quality, we compress manually
       selectionLimit: multiple ? selectionLimit : 1,
     };
 

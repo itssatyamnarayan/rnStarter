@@ -22,8 +22,8 @@ const Home = ({}: props) => {
         width={150}
         height={150}
         editIconSize={39}
-        source="gallery"
-        onImageChange={(image:any) => console.log('Selected image:', image)}
+        source="both"
+        onImageChange={(image: any) => console.log('Selected image:', image)}
       />
     </SafeAreaView>
   );

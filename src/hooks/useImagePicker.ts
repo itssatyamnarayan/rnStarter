@@ -1,4 +1,4 @@
-import { useState, useCallback,useRef } from 'react';
+import { useState, useCallback, useRef } from 'react';
 import { Alert, ActionSheetIOS, Platform } from 'react-native';
 import { pickImage } from '@/utils/imagePickerHandler';
 
@@ -9,12 +9,12 @@ type ImageResult = {
 };
 
 interface UseImagePickerOptions {
-    maxSize?: number;
-    quality?: number;
+  maxSize?: number;
+  quality?: number;
 
-    //For multiple Image select
-    multiple?: boolean;
-    selectionLimit?: number;
+  //For multiple Image select
+  multiple?: boolean;
+  selectionLimit?: number;
 }
 
 export const useImagePicker = (options?: UseImagePickerOptions) => {
@@ -33,11 +33,11 @@ export const useImagePicker = (options?: UseImagePickerOptions) => {
   // ─────────────────────────────────────────────
   const handlePick = useCallback(
     async (source: 'camera' | 'gallery') => {
-        if(isImagePickerOpen.current){
-            return;
-        }
+      if (isImagePickerOpen.current) {
+        return;
+      }
       try {
-        isImagePickerOpen.current=true
+        isImagePickerOpen.current = true;
 
         const result = await pickImage({
           source,
@@ -49,13 +49,13 @@ export const useImagePicker = (options?: UseImagePickerOptions) => {
 
         if (!result.cancelled && result.images.length) {
           if (multiple) {
-            setImages((prev:ImageResult[]) => [...prev, ...result.images]);
+            setImages((prev: ImageResult[]) => [...prev, ...result.images]);
           } else {
             setImages(result.images);
           }
         }
       } finally {
-        isImagePickerOpen.current=false
+        isImagePickerOpen.current = false;
       }
     },
     [multiple, maxSize, quality, selectionLimit],
@@ -75,25 +75,25 @@ export const useImagePicker = (options?: UseImagePickerOptions) => {
           options: ['Cancel', 'Camera', 'Gallery'],
           cancelButtonIndex: 0,
         },
-        (index:number) => {
-            if (index === 1) handlePick('camera');
-            if (index === 2) handlePick('gallery');
-            isImagePickerOpen.current = false;
+        (index: number) => {
+          if (index === 1) handlePick('camera');
+          if (index === 2) handlePick('gallery');
         },
       );
     } else {
       Alert.alert('Select Image', 'Choose option', [
         { text: 'Camera', onPress: () => handlePick('camera') },
         { text: 'Gallery', onPress: () => handlePick('gallery') },
-        { text: 'Cancel', style: 'cancel',  onDismiss: () => {
-            isImagePickerOpen.current = false;
-          }, },
+        {
+          text: 'Cancel',
+          style: 'cancel',
+        },
       ]);
     }
   };
 
   const removeImage = (uri: string) => {
-    setImages((prev:ImageResult[]) => prev.filter(img => img.uri !== uri));
+    setImages((prev: ImageResult[]) => prev.filter(img => img.uri !== uri));
   };
 
   const resetImages = () => setImages([]);

@@ -13,6 +13,7 @@
   "dependencies": {
     "@bam.tech/react-native-image-resizer": "^3.0.11",
     "@d11/react-native-fast-image": "^8.13.0",
+    "@gorhom/bottom-sheet": "^5.2.8",
     "@hookform/resolvers": "^5.2.2",
     "@mhpdev/react-native-haptics": "^1.0.1",
     "@react-native-community/datetimepicker": "^8.6.0",
@@ -30,6 +31,7 @@
     "react-native": "0.83.1",
     "react-native-country-select": "^0.3.8",
     "react-native-element-dropdown": "^2.12.4",
+    "react-native-gesture-handler": "^2.30.0",
     "react-native-image-picker": "^8.2.1",
     "react-native-international-phone-number": "^0.11.6",
     "react-native-mmkv": "^4.1.1",
