@@ -5,16 +5,19 @@ import '@/i18n';
 import Toast from 'react-native-toast-message';
 import { useAppTheme } from '@/context/ThemeContext';
 import { toastConfig } from '@/services/toast';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 const App = () => {
   const { theme } = useAppTheme();
 
   return (
-    <AppProviders>
-      <StatusBar barStyle={theme ? 'light-content' : 'dark-content'} />
-      <RootNavigator />
-      <Toast config={toastConfig} />
-    </AppProviders>
+    <GestureHandlerRootView>
+      <AppProviders>
+        <StatusBar barStyle={theme ? 'light-content' : 'dark-content'} />
+        <RootNavigator />
+        <Toast config={toastConfig} />
+      </AppProviders>
+    </GestureHandlerRootView>
   );
 };
 

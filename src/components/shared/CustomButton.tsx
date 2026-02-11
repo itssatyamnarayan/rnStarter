@@ -13,6 +13,8 @@ import {
 import CustomText from './CustomText';
 import { normalize } from '@/utils/normalize';
 import { isIOS } from '@/constants/device';
+import Icon from './Icon';
+import { IconName } from '@/assets/icons';
 
 /* ───────────────── Types ───────────────── */
 
@@ -20,12 +22,14 @@ type Variant = 'primary' | 'outline' | 'danger' | 'ghost';
 type Align = 'left' | 'center' | 'right';
 type HapticType = 'light' | 'medium' | 'heavy' | 'soft' | 'rigid';
 
-interface AppButtonProps {
+export interface AppButtonProps {
   title?: string;
   onPress?: () => Promise<void> | void;
   onLongPress?: () => void;
 
   variant?: Variant;
+  overrideVariantColor?: string;
+  overrideVariantTextColor?: string;
 
   disabled?: boolean;
   loading?: boolean;
@@ -33,8 +37,9 @@ interface AppButtonProps {
   align?: Align;
   fullWidth?: boolean;
 
-  leftIcon?: ReactNode;
-  rightIcon?: ReactNode;
+  leftIcon?: IconName;
+  rightIcon?: IconName;
+  iconSize?: number;
 
   haptic?: HapticType;
 
@@ -53,6 +58,8 @@ const CustomButton = ({
   onLongPress,
 
   variant = 'primary',
+  overrideVariantColor,
+  overrideVariantTextColor,
 
   disabled = false,
   loading = false,
@@ -62,6 +69,7 @@ const CustomButton = ({
 
   leftIcon,
   rightIcon,
+  iconSize = 18,
 
   haptic = 'light',
 
@@ -93,28 +101,28 @@ const CustomButton = ({
 
   const variantButtonStyle = useMemo(
     () => ({
-      primary: { backgroundColor: color.primary },
-      danger: { backgroundColor: color.danger },
+      primary: { backgroundColor: overrideVariantColor || color.primary },
+      danger: { backgroundColor: overrideVariantColor || color.danger },
       outline: {
         backgroundColor: 'transparent',
         borderWidth: 1,
-        borderColor: color.primary,
+        borderColor: overrideVariantColor || color.primary,
       },
       ghost: {
-        backgroundColor: 'transparent',
+        backgroundColor: overrideVariantColor || 'transparent',
       },
     }),
-    [color],
+    [color, overrideVariantColor],
   );
 
   const variantTextStyle = useMemo(
     () => ({
-      primary: { color: color.text_default },
-      danger: { color: color.text_default },
-      outline: { color: color.primary },
+      primary: { color: overrideVariantTextColor || color.text_default },
+      danger: { color: overrideVariantTextColor || color.text_default },
+      outline: { color: overrideVariantTextColor || color.primary },
       ghost: { color: color.primary },
     }),
-    [color],
+    [color, overrideVariantTextColor],
   );
 
   return (
@@ -143,7 +151,9 @@ const CustomButton = ({
       }}
     >
       {leftIcon && (
-        <View style={fullWidth && buttonStyles.leftIcon}>{leftIcon}</View>
+        <View style={fullWidth && buttonStyles.leftIcon}>
+          <Icon name={leftIcon} size={iconSize} />
+        </View>
       )}
       {/* Content */}
       <View style={buttonStyles.content}>
@@ -164,7 +174,9 @@ const CustomButton = ({
         )}
       </View>
       {rightIcon && (
-        <View style={fullWidth && buttonStyles.rightIcon}>{rightIcon}</View>
+        <View style={fullWidth && buttonStyles.rightIcon}>
+          <Icon name={rightIcon} size={iconSize} />
+        </View>
       )}
 
       {/* Loader */}

@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect, useRef } from 'react';
+import React, { useState, useCallback, useEffect, useRef, memo } from 'react';
 import { Pressable, StyleSheet, View, ViewStyle } from 'react-native';
 import AppImage from './AppImage';
 import { GlobalImage } from '@/assets/images';
@@ -7,7 +7,7 @@ import { useAppTheme } from '@/context/ThemeContext';
 import { isIOS } from '@/constants/device';
 import { useImagePicker } from '@/hooks/useImagePicker';
 import ImagePickerSheet from './bottom-sheet/sheets/ImagePickerSheet';
-import { BSRef } from './bottom-sheet/BaseBottomSheetModal';
+import { BSRef } from './bottom-sheet/types';
 
 type SourceType = 'gallery' | 'camera' | 'both';
 
@@ -27,7 +27,7 @@ interface Props {
   onImageChange?: (image: string) => void;
 }
 
-const AvatarPicker: React.FC<Props> = ({
+const AvatarPicker = ({
   imageUrl,
   defaultImage = GlobalImage.profilePlaceholder,
   width = 100,
@@ -40,7 +40,7 @@ const AvatarPicker: React.FC<Props> = ({
   maxSize = 256,
   quality = 80,
   onImageChange,
-}) => {
+}: Props) => {
   const { color } = useAppTheme();
   const { captureFromCamera, images, pickFromGallery } = useImagePicker({
     maxSize,
@@ -75,7 +75,6 @@ const AvatarPicker: React.FC<Props> = ({
   // Main press handler
   const handleEditPress = useCallback(() => {
     if (source === 'both') {
-      //dsd
       sheetRef.current?.open();
     } else if (source === 'camera') {
       captureFromCamera();
@@ -128,7 +127,7 @@ const AvatarPicker: React.FC<Props> = ({
   );
 };
 
-export default AvatarPicker;
+export default memo(AvatarPicker);
 
 const styles = StyleSheet.create({
   container: {

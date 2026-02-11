@@ -1,34 +1,21 @@
-import React, { forwardRef, useCallback, useMemo } from 'react';
-import { BottomSheetBackdrop, BottomSheetModal } from '@gorhom/bottom-sheet';
+import React, { forwardRef, memo, useCallback, useMemo } from 'react';
+import {
+  BottomSheetBackdrop,
+  BottomSheetModal,
+  BottomSheetModalProps,
+} from '@gorhom/bottom-sheet';
 import { BottomSheetDefaultBackdropProps } from '@gorhom/bottom-sheet/lib/typescript/components/bottomSheetBackdrop/types';
+import { useAppTheme } from '@/context/ThemeContext';
 
-interface Props {
+interface Props extends Partial<Omit<BottomSheetModalProps, 'snapPoints'>> {
   children: React.ReactNode;
   snapPoints?: string[];
-  backgroundStyle?: object;
-  enablePanDownToClose?: boolean;
-  index?: number;
-  onDismiss?: () => void;
 }
 
-export type BSRef = {
-  open: () => void;
-  close: () => void;
-};
-
 const BaseBottomSheetModal = forwardRef<BottomSheetModal, Props>(
-  (
-    {
-      children,
-      snapPoints = ['50%'],
-      backgroundStyle,
-      enablePanDownToClose = true,
-      index = 0,
-      onDismiss,
-    },
-    ref,
-  ) => {
+  ({ children, snapPoints = ['50%'], ...rest }, ref) => {
     const memoSnapPoints = useMemo(() => snapPoints, [snapPoints]);
+    const { color } = useAppTheme();
 
     const bottomSheetBackdropRenderer = useCallback(
       (backdropProps: BottomSheetDefaultBackdropProps) => {
@@ -46,13 +33,13 @@ const BaseBottomSheetModal = forwardRef<BottomSheetModal, Props>(
     return (
       <BottomSheetModal
         ref={ref}
-        index={index}
         snapPoints={memoSnapPoints}
-        backgroundStyle={backgroundStyle}
-        enablePanDownToClose={enablePanDownToClose}
+        backgroundStyle={[{ backgroundColor: color.background_secondary }]}
+        enablePanDownToClose
         enableDynamicSizing
-        onDismiss={onDismiss}
         backdropComponent={bottomSheetBackdropRenderer}
+        handleIndicatorStyle={{ backgroundColor: color.border }}
+        {...rest}
       >
         {children}
       </BottomSheetModal>
@@ -60,4 +47,4 @@ const BaseBottomSheetModal = forwardRef<BottomSheetModal, Props>(
   },
 );
 
-export default React.memo(BaseBottomSheetModal);
+export default memo(BaseBottomSheetModal);

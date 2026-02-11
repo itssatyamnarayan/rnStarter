@@ -4,15 +4,11 @@ import React, {
   useRef,
   useCallback,
 } from 'react';
-import { View, Pressable, StyleSheet } from 'react-native';
+import { Pressable, StyleSheet } from 'react-native';
 import CustomText from '@/components/shared/CustomText';
 import BaseBottomSheetModal from '../BaseBottomSheetModal';
-import { BottomSheetModal } from '@gorhom/bottom-sheet';
-
-export type ImagePickerSheetRef = {
-  open: () => void;
-  close: () => void;
-};
+import { BottomSheetModal, BottomSheetView } from '@gorhom/bottom-sheet';
+import { BSRef } from '../types';
 
 interface Props {
   onCamera: () => void;
@@ -20,36 +16,50 @@ interface Props {
   snapPoints?: string[];
 }
 
-const ImagePickerSheet = forwardRef<ImagePickerSheetRef, Props>(
-  ({ onCamera, onGallery, snapPoints = ['80%'] }, ref) => {
+const ImagePickerSheet = forwardRef<BSRef, Props>(
+  ({ onCamera, onGallery, snapPoints = ['25%'] }, ref) => {
     const sheetRef = useRef<BottomSheetModal>(null);
+    const pendingAction = useRef<'camera' | 'gallery' | null>(null);
 
     useImperativeHandle(ref, () => ({
       open: () => sheetRef.current?.present(),
       close: () => sheetRef.current?.dismiss(),
     }));
 
-    const handleCamera = useCallback(() => {
-      onCamera();
+    const handleCamera = () => {
+      pendingAction.current = 'camera';
       sheetRef.current?.dismiss();
-    }, [onCamera]);
+    };
 
-    const handleGallery = useCallback(() => {
-      onGallery();
+    const handleGallery = () => {
+      pendingAction.current = 'gallery';
       sheetRef.current?.dismiss();
-    }, [onGallery]);
+    };
+
+    const handleDismiss = useCallback(() => {
+      if (pendingAction.current === 'camera') {
+        onCamera();
+      } else if (pendingAction.current === 'gallery') {
+        onGallery();
+      }
+      pendingAction.current = null;
+    }, [onCamera, onGallery]);
 
     return (
-      <BaseBottomSheetModal ref={sheetRef} snapPoints={snapPoints}>
-        <View style={styles.container}>
+      <BaseBottomSheetModal
+        ref={sheetRef}
+        snapPoints={snapPoints}
+        onDismiss={handleDismiss}
+      >
+        <BottomSheetView style={styles.container}>
           <Pressable style={styles.item} onPress={handleCamera}>
-            <CustomText variant="body">Take Photo</CustomText>
+            <CustomText variant="body">📷 Take Photo</CustomText>
           </Pressable>
 
           <Pressable style={styles.item} onPress={handleGallery}>
-            <CustomText variant="body">Choose from Gallery</CustomText>
+            <CustomText variant="body">🖼️ Choose from Gallery</CustomText>
           </Pressable>
-        </View>
+        </BottomSheetView>
       </BaseBottomSheetModal>
     );
   },
