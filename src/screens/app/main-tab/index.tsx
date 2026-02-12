@@ -1,5 +1,5 @@
 import CustomButton from '@/components/shared/CustomButton';
-import CustomText from '@/components/shared/CustomText';
+import CustomText from '@/components/shared/text/CustomText';
 import AlertModal from '@/components/shared/modal/common/AlertModal';
 import { useAppTheme } from '@/context/ThemeContext';
 import { useAppDispatch } from '@/hooks/useAppDispatch';

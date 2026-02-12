@@ -8,6 +8,8 @@ import { isIOS } from '@/constants/device';
 import { useImagePicker } from '@/hooks/useImagePicker';
 import ImagePickerSheet from './bottom-sheet/sheets/ImagePickerSheet';
 import { BSRef } from './bottom-sheet/types';
+import BaseSkelton from './skelton/BaseSkelton';
+import { avatarPickerLayout } from './skelton/layouts/avatar.layout';
 
 type SourceType = 'gallery' | 'camera' | 'both';
 
@@ -20,6 +22,7 @@ interface Props {
   containerStyle?: ViewStyle;
   editable?: boolean;
   editIconSize?: number;
+  isLoading?: boolean;
 
   source?: SourceType;
   maxSize?: number;
@@ -36,6 +39,7 @@ const AvatarPicker = ({
   containerStyle,
   editable = false,
   editIconSize = 28,
+  isLoading,
   source = 'both',
   maxSize = 256,
   quality = 80,
@@ -85,8 +89,23 @@ const AvatarPicker = ({
 
   return (
     <>
-      <View style={[styles.container, dynamicContainerStyle, containerStyle]}>
-        <View style={[styles.imageContainer, { borderRadius: width / 2 }]}>
+      <BaseSkelton
+        isLoading={isLoading}
+        layout={avatarPickerLayout({
+          size: width,
+        })}
+        containerStyle={[
+          styles.container,
+          dynamicContainerStyle,
+          containerStyle,
+        ]}
+      >
+        <View
+          style={[
+            styles.imageContainer,
+            { borderRadius: width / 2, borderColor: color.border },
+          ]}
+        >
           <AppImage
             source={imageSource}
             style={styles.image}
@@ -117,7 +136,7 @@ const AvatarPicker = ({
             <Icon name="edit" size={14} />
           </Pressable>
         )}
-      </View>
+      </BaseSkelton>
       <ImagePickerSheet
         ref={sheetRef}
         onCamera={captureFromCamera}
@@ -131,14 +150,13 @@ export default memo(AvatarPicker);
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#fff',
     marginTop: 16,
-    borderWidth: 2.5,
-    borderColor: '#fff',
   },
   imageContainer: {
     overflow: 'hidden',
-    flex: 1,
+    width: '100%',
+    height: '100%',
+    borderWidth: 0.5,
   },
   image: {
     width: '100%',

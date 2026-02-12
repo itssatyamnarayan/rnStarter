@@ -5,7 +5,7 @@ import React, {
   useCallback,
 } from 'react';
 import { Pressable, StyleSheet } from 'react-native';
-import CustomText from '@/components/shared/CustomText';
+import CustomText from '@/components/shared/text/CustomText';
 import BaseBottomSheetModal from '../BaseBottomSheetModal';
 import { BottomSheetModal, BottomSheetView } from '@gorhom/bottom-sheet';
 import { BSRef } from '../types';

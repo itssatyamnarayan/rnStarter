@@ -1,5 +1,5 @@
 import CustomButton from '@/components/shared/CustomButton';
-import CustomText from '@/components/shared/CustomText';
+import CustomText from '@/components/shared/text/CustomText';
 import FormInput from '@/components/shared/form-input/FormInput';
 import { useAppTheme } from '@/context/ThemeContext';
 import { AuthStackScreenProps } from '@/types';

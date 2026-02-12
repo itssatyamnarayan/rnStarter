@@ -1,5 +1,5 @@
 import CustomButton from '@/components/shared/CustomButton';
-import CustomText from '@/components/shared/CustomText';
+import CustomText from '@/components/shared/text/CustomText';
 import { layout } from '@/theme/layout';
 import { TabScreenProps } from '@/types';
 import React from 'react';

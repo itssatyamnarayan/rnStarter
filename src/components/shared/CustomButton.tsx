@@ -10,7 +10,7 @@ import {
   ViewStyle,
   StyleProp,
 } from 'react-native';
-import CustomText from './CustomText';
+import CustomText from './text/CustomText';
 import { normalize } from '@/utils/normalize';
 import { isIOS } from '@/constants/device';
 import Icon from './Icon';

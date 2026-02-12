@@ -4,7 +4,7 @@ import { StyleSheet, Text, View } from 'react-native';
 import Tooltip from 'react-native-walkthrough-tooltip';
 import { Controller, FieldValues } from 'react-hook-form';
 import { FormInputRenderer } from './FormInputRenderer';
-import CustomText from '../CustomText';
+import CustomText from '../text/CustomText';
 import { useAppTheme } from '@/context/ThemeContext';
 import { FontFamily, palette } from '@/theme';
 import Icon from '../Icon';

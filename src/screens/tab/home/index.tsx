@@ -1,4 +1,4 @@
-import CustomText from '@/components/shared/CustomText';
+import CustomText from '@/components/shared/text/CustomText';
 import AvatarPicker from '@/components/shared/AvatarPicker';
 import { layout } from '@/theme/layout';
 import { TabScreenProps } from '@/types';
@@ -24,6 +24,7 @@ const Home = ({}: props) => {
         editIconSize={39}
         source="both"
         onImageChange={(image: any) => console.log('Selected image:', image)}
+        isLoading={false}
       />
     </SafeAreaView>
   );

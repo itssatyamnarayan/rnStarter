@@ -1,6 +1,6 @@
 import React, { memo, useCallback } from 'react';
 import { StyleSheet, View, ViewStyle, StyleProp } from 'react-native';
-import CustomText from '../../CustomText';
+import CustomText from '../../text/CustomText';
 import CustomButton, { AppButtonProps } from '../../CustomButton';
 import Icon from '../../Icon';
 import BaseModal from '../BaseModal';
