@@ -9,7 +9,7 @@ import { useImagePicker } from '@/hooks/useImagePicker';
 import ImagePickerSheet from './bottom-sheet/sheets/ImagePickerSheet';
 import { BSRef } from './bottom-sheet/types';
 import BaseSkelton from './skelton/BaseSkelton';
-import { avatarPickerLayout } from './skelton/layouts/avatar.layout';
+import { avatarPickerLayout } from './skelton/layouts';
 
 type SourceType = 'gallery' | 'camera' | 'both';
 

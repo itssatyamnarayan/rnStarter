@@ -1,47 +1,8 @@
 import { useAppTheme } from '@/context/ThemeContext';
-import {
-  FONT_MAP,
-  FontWeight,
-  TextVariant,
-  TYPOGRAPHY,
-} from '@/theme/typography';
-import React, { memo, ReactNode, useState } from 'react';
-import {
-  Text,
-  StyleSheet,
-  StyleProp,
-  TextStyle,
-  TextProps,
-} from 'react-native';
-
-type EllipsizeMode = TextProps['ellipsizeMode'];
-type LineBreakMode = TextProps['lineBreakMode'];
-
-type textAlign = 'auto' | 'left' | 'right' | 'center' | 'justify';
-interface CustomTextProps {
-  weight?: FontWeight;
-  variant?: TextVariant;
-  textColor?: string;
-  textAlign?: textAlign;
-  style?: StyleProp<TextStyle>;
-  onPress?: () => void;
-  ellipsizeMode?: EllipsizeMode;
-  numberOfLines?: number;
-  lineBreakMode?: LineBreakMode;
-  children: ReactNode;
-  restTextProps?: Omit<
-    TextProps,
-    | 'style'
-    | 'onPress'
-    | 'onPressIn'
-    | 'onPressOut'
-    | 'children'
-    | 'ellipsizeMode'
-    | 'numberOfLines'
-    | 'lineBreakMode'
-    | 'allowFontScaling'
-  >;
-}
+import { FONT_MAP, TYPOGRAPHY } from '@/theme/typography';
+import React, { memo, useState } from 'react';
+import { Text, StyleSheet } from 'react-native';
+import { CustomTextProps } from './types';
 
 const CustomText = ({
   weight = '400',

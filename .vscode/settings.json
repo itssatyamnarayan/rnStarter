@@ -1,11 +1,28 @@
 {
-  "i18n-ally.localesPaths": [
-    "src/i18n/locales",
-    "ios/Pods/RCT-Folly/folly/lang",
-    "ios/Pods/boost/boost/predef/language",
-    "ios/Pods/Headers/Private/RCT-Folly/folly/lang",
-    "ios/Pods/Headers/Public/RCT-Folly/folly/lang"
-  ],
+  "i18n-ally.localesPaths": ["src/i18n/locales"],
   "i18n-ally.keystyle": "nested",
-  "typescript.tsdk": "node_modules/typescript/lib"
+  "typescript.tsdk": "node_modules/typescript/lib",
+
+  // Performance optimizations - exclude large folders from VS Code
+  "files.watcherExclude": {
+    "**/node_modules/**": true,
+    "**/android/app/build/**": true,
+    "**/android/build/**": true,
+    "**/ios/Pods/**": true,
+    "**/ios/build/**": true,
+    "**/.git/**": true,
+    "**/vendor/**": true
+  },
+  "search.exclude": {
+    "**/node_modules": true,
+    "**/android": true,
+    "**/ios": true,
+    "**/vendor": true,
+    "**/.git": true
+  },
+  "files.exclude": {
+    "**/android/app/build": true,
+    "**/android/build": true,
+    "**/ios/build": true
+  }
 }

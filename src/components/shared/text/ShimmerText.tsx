@@ -1,55 +1,10 @@
 import { useAppTheme } from '@/context/ThemeContext';
-import {
-  FONT_MAP,
-  FontWeight,
-  TextVariant,
-  TYPOGRAPHY,
-} from '@/theme/typography';
-import React, { memo, useState, useMemo, ReactNode } from 'react';
-import {
-  Text,
-  StyleSheet,
-  View,
-  StyleProp,
-  ViewStyle,
-  TextStyle,
-  TextProps,
-} from 'react-native';
+import { FONT_MAP, TYPOGRAPHY } from '@/theme/typography';
+import React, { memo, useState, useMemo } from 'react';
+import { Text, StyleSheet, View, ViewStyle } from 'react-native';
 import BaseSkelton from '../skelton/BaseSkelton';
-import { textLayout } from '../skelton/layouts/text.layout';
-
-type EllipsizeMode = TextProps['ellipsizeMode'];
-type LineBreakMode = TextProps['lineBreakMode'];
-type TextAlignType = 'auto' | 'left' | 'right' | 'center' | 'justify';
-
-interface CustomTextProps {
-  weight?: FontWeight;
-  variant?: TextVariant;
-  textColor?: string;
-  textAlign?: TextAlignType;
-  isLoading?: boolean;
-  shimmerWidth?: number;
-  shimmerHeight?: number;
-  containerStyle?: StyleProp<ViewStyle>;
-  style?: StyleProp<TextStyle>;
-  onPress?: () => void;
-  ellipsizeMode?: EllipsizeMode;
-  numberOfLines?: number;
-  lineBreakMode?: LineBreakMode;
-  children: ReactNode;
-  restTextProps?: Omit<
-    TextProps,
-    | 'style'
-    | 'onPress'
-    | 'onPressIn'
-    | 'onPressOut'
-    | 'children'
-    | 'ellipsizeMode'
-    | 'numberOfLines'
-    | 'lineBreakMode'
-    | 'allowFontScaling'
-  >;
-}
+import { textLayout } from '../skelton/layouts';
+import { ShimmerTextProps } from './types';
 
 const ShimmerText = ({
   weight = '400',
@@ -59,14 +14,14 @@ const ShimmerText = ({
   textAlign,
   isLoading = false,
   shimmerWidth = 100,
-  shimmerHeight = 40,
+  shimmerHeight = 30,
   containerStyle,
   onPress,
   children,
   ellipsizeMode,
   numberOfLines,
   lineBreakMode,
-}: CustomTextProps) => {
+}: ShimmerTextProps) => {
   const { color } = useAppTheme();
   const [pressed, setPressed] = useState<boolean>(false);
   const opacity = pressed ? 0.8 : 1;
